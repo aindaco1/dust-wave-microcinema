@@ -998,12 +998,6 @@ legend {
     margin: 38px 0 50px;
     padding: 23px 0;
   }
-  .venue-note > .mono br {
-    display: none;
-  }
-  .venue-note > .mono br:after {
-    content: " / ";
-  }
   .venue-note p {
     font-size: 18px;
   }

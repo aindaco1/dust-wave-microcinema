@@ -8,10 +8,11 @@
 - D1 records and R2 objects survive a complete local runtime restart. Miniflare 5 uses `resourcePersistencePath`; the legacy per-resource persistence options are not used.
 - Calendar date conversion across summer/winter and midnight, invalid calendar dates, ambiguous/nonexistent daylight-saving times, UTF-8 line folding, escaping, stable UIDs, revisions and cancellation status.
 - Immutable platform commit, package versions and lockfile.
-- Browser: local admin login; creation and publication; title, Spanish and ticket-link edits; JPEG-to-WebP upload and preview; Spanish public event rendering; platform confirmation dialog; remove and restore; narrow editor and public programme without horizontal overflow; public proposal submission and private draft creation.
+- Browser: local admin login; creation and publication; title, Spanish and ticket-link edits; JPEG-to-WebP upload and preview; Spanish public event rendering; platform confirmation dialog; remove and restore; narrow editor and public program without horizontal overflow; public proposal submission and private draft creation.
 - Source formatting and dependency audit.
+- Vector revision: original Dust Wave glove retained, film-reel variation applied to header/footer/placeholders, small-size favicon, live-text master and outlined web illustration, PNG exports and source notes. English copy uses US spelling; Spanish follows the rewritten meaning.
 
-The public preview contains explicitly labelled fictional programme data. Live email delivery, live Turnstile, production resources, domain routing, and physical calendar-app import remain unverified until deployment.
+The public preview contains explicitly labeled fictional program data. Live email delivery, live Turnstile, production resources, domain routing, and physical calendar-app import remain unverified until deployment.
 
 ## Deployment state
 

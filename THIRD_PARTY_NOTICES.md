@@ -20,8 +20,8 @@ The user supplied a captured Making Software design folder. The site adapts its 
 
 https://www.makingsoftware.com/
 
-Pink Flamingo Cinema informed the programme structure (film details, curatorial descriptions, event links and archive). Its film descriptions, programme names, imagery and event data are not copied.
+Pink Flamingo Cinema informed the program structure (film details, curatorial descriptions, event links and archive). Its film descriptions, program names, imagery and event data are not copied.
 
 https://pinkflamingocinema.com/
 
-The sample film-reel SVG was drawn for this local preview. Sample event listings are illustrative and are not production programme data.
+The Microcinema logo adapts Dust Wave’s original vector glove, replacing its dust clouds with film reels. The favicon and sample film-reel illustration were rebuilt as editable vector artwork. Sources, typography, editing notes, and PNG exports are documented in [artwork/README.md](artwork/README.md). Sample events are preview content, not real announcements.

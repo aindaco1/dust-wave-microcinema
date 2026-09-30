@@ -17,6 +17,8 @@ export const timeLabel = (iso, lang) =>
     hour: "numeric",
     minute: "2-digit",
   });
+const brandMark = (className) =>
+  `<img class="${className}" src="/assets/microcinema-mark.svg" alt="" aria-hidden="true" width="1078" height="985">`;
 const paragraphs = (s) =>
   x(s)
     .split(/\n\s*\n/)
@@ -68,7 +70,7 @@ export function shell({
   return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${x(title ? title + " · Dust Wave Microcinema" : "Dust Wave Microcinema · Albuquerque")}</title><meta name="description" content="${x(description || t.intro)}"><meta name="theme-color" content="#fbfbf8"><link rel="icon" href="/assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css"><link rel="preload" href="/assets/departure-mono.woff2" as="font" type="font/woff2" crossorigin><link rel="canonical" href="${x(canonical)}"><link rel="alternate" hreflang="en" href="${x(origin(env) + pathFor("en", path))}"><link rel="alternate" hreflang="es" href="${x(origin(env) + pathFor("es", path))}"><meta property="og:title" content="${x(title || "Dust Wave Microcinema")}"><meta property="og:description" content="${x((description || t.intro).slice(0, 300))}"><meta property="og:url" content="${x(canonical)}"><meta property="og:type" content="website"><meta property="og:image" content="${x(origin(env) + (image || "/assets/room.webp"))}">${privatePage || local(env) ? '<meta name="robots" content="noindex,nofollow">' : ""}</head><body class="${path.startsWith("/admin") ? "admin-page" : ""}"><a class="skip" href="#main">${t.skip}</a>
  ${local(env) ? `<div class="preview-banner">${t.localNote}</div>` : ""}
  <div class="page"><header class="site-header"><div class="topline"><a href="https://dustwave.xyz" class="parent-brand">DUST WAVE ↗</a><span>${t.edition}</span><a href="${pathFor(other, path)}" lang="${other}" aria-label="${other === "es" ? "Ver en español" : "View in English"}">${other === "es" ? "ESPAÑOL" : "ENGLISH"}</a></div>
- <div class="masthead"><a href="${p("/")}" class="wordmark" aria-label="Dust Wave Microcinema">DUST WAVE<br>MICROCINEMA<span class="star" aria-hidden="true">✳</span></a><p>${x(t.tagline).replace("\n", "<br>")}</p></div>
+ <div class="masthead"><a href="${p("/")}" class="wordmark" aria-label="Dust Wave Microcinema">DUST WAVE<br>MICROCINEMA${brandMark("brand-symbol")}</a><p>${x(t.tagline).replace("\n", "<br>")}</p></div>
  <nav aria-label="${lang === "es" ? "Navegación principal" : "Main navigation"}">${[
    ["/", t.programme],
    ["/archive", t.archive],
@@ -80,7 +82,7 @@ export function shell({
        `<a ${path === href ? 'aria-current="page"' : ""} href="${p(href)}">${label}</a>`,
    )
    .join("")}<span class="nav-address">709 HAINES AVE NW</span></nav></header>
- <main id="main">${body}</main><footer><div class="footer-mark">DW<span>✳</span></div><p>${t.footer}<br><span class="mono">ALBUQUERQUE, NEW MEXICO</span></p><div><a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a><br><a href="${p("/privacy")}">${t.privacy}</a> · <a href="${p("/admin/")}">${t.admin}</a></div></footer></div>
+ <main id="main">${body}</main><footer><div class="footer-mark">${brandMark("footer-symbol")}</div><p>${t.footer}<br><span class="mono">ALBUQUERQUE, NEW MEXICO</span></p><div><a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a><br><a href="${p("/privacy")}">${t.privacy}</a> · <a href="${p("/admin/")}">${t.admin}</a></div></footer></div>
  ${script ? `<script type="module" src="/assets/${script}.js"></script>` : ""}${script && !local(env) ? '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' : ""}</body></html>`;
 }
 export function cta(event, lang, { secondary = true } = {}) {
@@ -96,7 +98,7 @@ export function cta(event, lang, { secondary = true } = {}) {
     : `<a class="button primary" href="${x(e.url)}" rel="noopener">${e.mode === "tickets" ? t.tickets : t.rsvp} <span aria-hidden="true">↗</span></a>${secondary ? `<a class="text-link" href="${calendarLink}">${t.calendar} ↓</a>` : ""}`;
 }
 function artwork(e, lang, index = 1) {
-  return `<figure class="event-art ${e.image ? "" : "no-image"}">${e.image ? `<img src="${x(e.image)}" alt="${x(e.imageAlt || e.title)}" ${index > 1 ? 'loading="lazy"' : ""} width="1200" height="800">` : `<div class="art-placeholder" aria-hidden="true"><span>DW / ${String(index).padStart(2, "0")}</span><span class="aperture">✳</span><span>LIGHT. SOUND. COMPANY.</span></div>`}<figcaption><span>FIG. ${String(index).padStart(2, "0")}</span><span>DUST WAVE MICROCINEMA</span></figcaption></figure>`;
+  return `<figure class="event-art ${e.image ? "" : "no-image"}">${e.image ? `<img src="${x(e.image)}" alt="${x(e.imageAlt || e.title)}" ${index > 1 ? 'loading="lazy"' : ""} width="1200" height="800">` : `<div class="art-placeholder" aria-hidden="true"><span>DW / ${String(index).padStart(2, "0")}</span>${brandMark("placeholder-symbol")}<span>DUST WAVE MICROCINEMA</span></div>`}<figcaption><span>FIG. ${String(index).padStart(2, "0")}</span><span>DUST WAVE MICROCINEMA</span></figcaption></figure>`;
 }
 function eventRow(event, lang, index) {
   const e = localized(event, lang),
@@ -121,8 +123,8 @@ export function programme(events, lang, env, archive = false) {
   if (list.length)
     body += `<section class="schedule" aria-label="${t.programme}"><div class="list-heading mono"><span>${archive ? t.archive : t.programme}</span><span>${list.length} ${lang === "es" ? "EVENTOS" : "EVENTS"} / ${ZONE}</span></div>${list.map((e, i) => eventRow(e, lang, i + 1)).join("")}</section>`;
   else
-    body += `<section class="empty-state"><span class="aperture" aria-hidden="true">✳</span><div><h2>${archive ? t.archiveEmpty : t.empty}</h2><p>${t.emptyBody}</p><a class="button" href="${pathFor(lang, "/propose")}">${t.propose} ↗</a></div></section>`;
-  body += `<aside class="venue-note"><div class="mono">30 ${lang === "es" ? "BUTACAS" : "SEATS"}<br>${lang === "es" ? "POSIBILIDADES SIN LÍMITE." : "UNLIMITED POSSIBILITIES."}</div><p>${t.visitIntro}</p><a class="text-link" href="${pathFor(lang, "/visit")}">${t.visit} ↗</a></aside>`;
+    body += `<section class="empty-state">${brandMark("empty-symbol")}<div><h2>${archive ? t.archiveEmpty : t.empty}</h2><p>${t.emptyBody}</p><a class="button" href="${pathFor(lang, "/propose")}">${t.propose} ↗</a></div></section>`;
+  body += `<aside class="venue-note"><div class="mono">${x(t.venueNote).replace("\n", "<br>")}</div><p>${t.visitIntro}</p><a class="text-link" href="${pathFor(lang, "/visit")}">${t.visit} ↗</a></aside>`;
   return shell({
     lang,
     path: archive ? "/archive" : "/",

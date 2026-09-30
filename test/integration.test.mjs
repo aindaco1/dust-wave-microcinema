@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { copy } from "../src/copy.js";
 import { runtime } from "../scripts/runtime.mjs";
 import { sha256Hex } from "@dustwave/worker-core/crypto";
 
@@ -134,7 +135,9 @@ test("Worker, D1 and R2: login, events, privacy, concurrent editing, proposals a
     auth: true,
   }));
   assert(
-    (await (await req("/events/test-screening")).text()).includes("Cancelled"),
+    (await (await req("/events/test-screening")).text()).includes(
+      copy.en.cancelled,
+    ),
   );
   assert.match(
     await (await req("/events/test-screening.ics")).text(),
@@ -276,6 +279,6 @@ test("production fails closed without challenge configuration and never exposes 
   const page = await (
     await mf.dispatchFetch("https://dustwavemicrocinema.com/")
   ).text();
-  assert(!page.includes("sample programme"));
-  assert(page.includes("The next programme is taking shape."));
+  assert(!page.includes(copy.en.localNote));
+  assert(page.includes(copy.en.empty));
 });

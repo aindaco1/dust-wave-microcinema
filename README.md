@@ -1,6 +1,6 @@
 # Dust Wave Microcinema
 
-An independent, bilingual programme and event editor for **dustwavemicrocinema.com**.
+An independent, bilingual program and event editor for **dustwavemicrocinema.com**.
 
 The public site includes upcoming events, individual event pages, an automatic archive, venue/parking information, and a private event-proposal inbox. Admins can create, edit, publish, cancel, remove, and restore events, upload artwork, and supply optional Spanish translations. Ticket buttons link to `shop.dustwave.xyz`; RSVP buttons link to an external HTTPS registration page. Calendar downloads use Albuquerque time and stable event IDs.
 
@@ -16,7 +16,7 @@ npm run dev
 ```
 
 Open **http://localhost:8793** and **http://localhost:8793/admin/**.
-Use `alonso@dustwave.xyz` and select **Open local test sign-in**. Local development sends no email. The first launch seeds clearly labelled sample events into an isolated local database; these are not real announcements. The production migration contains no events.
+Use `alonso@dustwave.xyz` and select **Open local test sign-in**. Local development sends no email. The first launch seeds clearly labeled sample events into an isolated local database; these are not real announcements. The production migration contains no events.
 
 Local database and uploaded images persist under `.wrangler/local/`. To start an unseeded local database, move that directory aside and run `npm run build && node scripts/dev.mjs --empty`. The preview has no hot reload; restart `npm run dev` after source changes.
 
@@ -28,7 +28,7 @@ npm run deploy:check   # bundle for Cloudflare without deploying
 
 ## Architecture
 
-One Cloudflare Worker renders HTML and serves the small API. D1 stores events, private proposals, hashed login tokens, sessions, and rate limits. A separate private R2 bucket stores uploaded WebP artwork. JavaScript is used for the admin and proposal forms; the programme, navigation, event pages, archive, and calendar links work without it.
+One Cloudflare Worker renders HTML and serves the small API. D1 stores events, private proposals, hashed login tokens, sessions, and rate limits. A separate private R2 bucket stores uploaded WebP artwork. JavaScript is used for the admin and proposal forms; the program, navigation, event pages, archive, and calendar links work without it.
 
 Shared code is pinned at `shared/dust-wave-platform` commit `0f84a675deb9577648b35ae0fd0ebed5e9abcb60`:
 
@@ -54,3 +54,5 @@ Microcinema owns its model, storage, admin allowlist, sessions, routes, and depl
 See [DEPLOYMENT.md](DEPLOYMENT.md). The checked-in D1 ID is an explicit placeholder. No production database, domain, Turnstile key, or email delivery is provisioned by running the build or local preview.
 
 Design references and asset notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Validation evidence is in [VALIDATION.md](VALIDATION.md).
+
+Editable logo and illustration masters, PNG exports, and construction notes are in [artwork/](artwork/README.md).

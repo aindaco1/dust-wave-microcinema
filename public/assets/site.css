@@ -173,15 +173,15 @@ summary,
   text-decoration: none;
   letter-spacing: -2px;
   position: relative;
-  padding-right: 72px;
+  padding-right: 116px;
   white-space: nowrap;
 }
-.wordmark .star {
+.wordmark .brand-symbol {
   position: absolute;
   right: 0;
-  bottom: 3px;
-  font-size: 66px;
-  font-family: Georgia;
+  bottom: 4px;
+  width: 100px;
+  height: auto;
 }
 .masthead p {
   max-width: 260px;
@@ -429,9 +429,9 @@ nav a[aria-current="page"]:before {
   align-items: center;
   padding: 44px;
 }
-.empty-state .aperture {
-  font-size: 130px;
-  color: var(--blue);
+.empty-state .empty-symbol {
+  width: 140px;
+  height: auto;
 }
 .empty-state h2 {
   font-size: 32px;
@@ -448,13 +448,17 @@ nav a[aria-current="page"]:before {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: #edf0ff;
-  background-image: radial-gradient(#6978db 0.5px, transparent 0.5px);
-  background-size: 4px 4px;
+  background-color: #e9edfc;
+  background-image:
+    linear-gradient(#263ad612 1px, transparent 1px),
+    linear-gradient(90deg, #263ad612 1px, transparent 1px);
+  background-size: 32px 32px;
   font: 11px var(--mono);
 }
-.art-placeholder .aperture {
-  font: 170px/1 Georgia;
+.art-placeholder .placeholder-symbol {
+  width: 42%;
+  height: auto;
+  object-fit: contain;
 }
 .art-placeholder > span:first-child {
   align-self: flex-start;
@@ -652,14 +656,9 @@ footer > div:last-child {
   font-size: 12px;
   line-height: 2;
 }
-.footer-mark {
-  font: 28px var(--mono);
-  color: var(--blue);
-}
-.footer-mark span {
-  font: 40px Georgia;
-  vertical-align: middle;
-  margin-left: 6px;
+.footer-symbol {
+  width: 74px;
+  height: auto;
 }
 .login-panel {
   max-width: 580px;
@@ -682,10 +681,10 @@ footer > div:last-child {
 }
 .admin-page .wordmark {
   font-size: 42px;
-  padding-right: 50px;
+  padding-right: 82px;
 }
-.admin-page .wordmark .star {
-  font-size: 42px;
+.admin-page .wordmark .brand-symbol {
+  width: 70px;
 }
 .admin-page .masthead p {
   font-size: 16px;
@@ -823,10 +822,10 @@ legend {
   }
   .wordmark {
     font-size: 77px;
-    padding-right: 90px;
+    padding-right: 132px;
   }
-  .wordmark .star {
-    font-size: 77px;
+  .wordmark .brand-symbol {
+    width: 116px;
   }
 }
 @media (max-width: 1050px) {
@@ -835,10 +834,10 @@ legend {
   }
   .wordmark {
     font-size: 49px;
-    padding-right: 58px;
+    padding-right: 90px;
   }
-  .wordmark .star {
-    font-size: 49px;
+  .wordmark .brand-symbol {
+    width: 78px;
   }
   .masthead p {
     font-size: 17px;
@@ -896,12 +895,13 @@ legend {
   }
   .wordmark {
     display: inline-block;
-    font-size: clamp(29px, 7.7vw, 49px);
+    font-size: clamp(25px, 7vw, 46px);
     letter-spacing: -1px;
-    padding-right: clamp(33px, 9vw, 58px);
+    padding-right: clamp(60px, 17vw, 86px);
   }
-  .wordmark .star {
-    font-size: clamp(29px, 7.7vw, 49px);
+  .wordmark .brand-symbol {
+    width: clamp(52px, 15vw, 76px);
+    bottom: 0;
   }
   .masthead p {
     font-size: 17px;
@@ -1006,8 +1006,8 @@ legend {
     grid-template-columns: 1fr;
     gap: 10px;
   }
-  .empty-state .aperture {
-    font-size: 85px;
+  .empty-state .empty-symbol {
+    width: 86px;
   }
   .empty-state h2 {
     font-size: 29px;
@@ -1075,12 +1075,8 @@ legend {
     gap: 18px;
     padding-bottom: 28px;
   }
-  .footer-mark {
-    font-size: 22px;
-  }
-  .footer-mark span {
-    display: block;
-    font-size: 30px;
+  .footer-symbol {
+    width: 60px;
   }
   footer > div:last-child {
     grid-column: 1/-1;
@@ -1091,11 +1087,11 @@ legend {
     font-size: 15px;
   }
   .admin-page .wordmark {
-    font-size: 34px;
-    padding-right: 40px;
+    font-size: clamp(25px, 7vw, 34px);
+    padding-right: 62px;
   }
-  .admin-page .wordmark .star {
-    font-size: 34px;
+  .admin-page .wordmark .brand-symbol {
+    width: 54px;
   }
   .admin-toolbar {
     align-items: flex-start;

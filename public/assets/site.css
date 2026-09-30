@@ -216,11 +216,6 @@ nav a[aria-current="page"]:before {
   content: "■ ";
   font-size: 9px;
 }
-.nav-address {
-  margin-left: auto;
-  color: var(--muted);
-  font-size: 10px;
-}
 .section-heading {
   padding: 52px 0 35px;
   display: grid;
@@ -648,7 +643,8 @@ footer p {
   font-size: 15px;
 }
 footer p .mono {
-  font-size: 9px;
+  font-size: 14px;
+  line-height: 1.75;
   color: var(--muted);
 }
 footer > div:last-child {
@@ -915,9 +911,6 @@ legend {
     flex-wrap: wrap;
     font-size: 10px;
     padding: 14px 0;
-  }
-  .nav-address {
-    display: none;
   }
   .section-heading {
     display: block;

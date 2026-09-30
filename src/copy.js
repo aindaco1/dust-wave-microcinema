@@ -146,7 +146,7 @@ export const copy = {
     readMore: "Read more",
     removeImage: "Remove artwork",
     uploading: "Preparing artwork…",
-    privacy: "Your proposal and privacy",
+    privacy: "Privacy",
     privacyText:
       "Only the Microcinema team can see the contact details you send with a proposal. We use them to review your idea and get back to you. We don’t add you to a mailing list. To have your proposal deleted, email info@dustwave.xyz.",
     emptyArtwork: "EVENT ARTWORK",
@@ -303,7 +303,7 @@ export const copy = {
     readMore: "Leer más",
     removeImage: "Quitar imagen",
     uploading: "Preparando imagen…",
-    privacy: "Tu propuesta y privacidad",
+    privacy: "Privacidad",
     privacyText:
       "Solo el equipo del Microcine puede ver los datos de contacto que envías con tu propuesta. Los usamos para revisar tu idea y responderte. No te añadimos a una lista de correo. Para pedir que eliminemos tu propuesta, escribe a info@dustwave.xyz.",
     emptyArtwork: "IMAGEN DEL EVENTO",

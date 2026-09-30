@@ -82,7 +82,7 @@ export function shell({
        `<a ${path === href ? 'aria-current="page"' : ""} href="${p(href)}">${label}</a>`,
    )
    .join("")}<span class="nav-address">709 HAINES AVE NW</span></nav></header>
- <main id="main">${body}</main><footer><div class="footer-mark">${brandMark("footer-symbol")}</div><p>${t.footer}<br><span class="mono">ALBUQUERQUE, NEW MEXICO</span></p><div><a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a><br><a href="${p("/privacy")}">${t.privacy}</a> · <a href="${p("/admin/")}">${t.admin}</a></div></footer></div>
+ <main id="main">${body}</main><footer><div class="footer-mark">${brandMark("footer-symbol")}</div><p><span class="mono">709 Haines Ave NW<br>Albuquerque, NM 87102</span></p><div><a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a><br><a href="${p("/privacy")}">${t.privacy}</a> · <a href="${p("/admin/")}">${t.admin}</a></div></footer></div>
  ${script ? `<script type="module" src="/assets/${script}.js"></script>` : ""}${script && !local(env) ? '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' : ""}</body></html>`;
 }
 export function cta(event, lang, { secondary = true } = {}) {

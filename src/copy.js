@@ -143,7 +143,6 @@ export const copy = {
     notFoundBody:
       "The event may have been removed, or the address may be incorrect.",
     notice: "Audience notes",
-    footer: "A screening room run by filmmakers.",
     readMore: "Read more",
     removeImage: "Remove artwork",
     uploading: "Preparing artwork…",
@@ -301,7 +300,6 @@ export const copy = {
     notFoundBody:
       "El evento puede haberse quitado o la dirección puede ser incorrecta.",
     notice: "Avisos al público",
-    footer: "Una sala de cine hecha por cineastas.",
     readMore: "Leer más",
     removeImage: "Quitar imagen",
     uploading: "Preparando imagen…",

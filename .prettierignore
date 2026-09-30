@@ -1,0 +1,7 @@
+shared/
+node_modules/
+dist/
+work/
+.wrangler/
+package-lock.json
+public/assets/*.svg

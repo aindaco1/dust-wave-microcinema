@@ -1,0 +1,56 @@
+# Dust Wave Microcinema
+
+An independent, bilingual programme and event editor for **dustwavemicrocinema.com**.
+
+The public site includes upcoming events, individual event pages, an automatic archive, venue/parking information, and a private event-proposal inbox. Admins can create, edit, publish, cancel, remove, and restore events, upload artwork, and supply optional Spanish translations. Ticket buttons link to `shop.dustwave.xyz`; RSVP buttons link to an external HTTPS registration page. Calendar downloads use Albuquerque time and stable event IDs.
+
+## Run locally
+
+Requires Node.js 24 or newer.
+
+```sh
+git clone --recurse-submodules https://github.com/aindaco1/dust-wave-microcinema.git
+cd dust-wave-microcinema
+npm ci
+npm run dev
+```
+
+Open **http://localhost:8793** and **http://localhost:8793/admin/**.
+Use `alonso@dustwave.xyz` and select **Open local test sign-in**. Local development sends no email. The first launch seeds clearly labelled sample events into an isolated local database; these are not real announcements. The production migration contains no events.
+
+Local database and uploaded images persist under `.wrangler/local/`. To start an unseeded local database, move that directory aside and run `npm run build && node scripts/dev.mjs --empty`. The preview has no hot reload; restart `npm run dev` after source changes.
+
+```sh
+npm run check          # build plus domain, integration and platform-pin checks
+npm run format:check   # source formatting
+npm run deploy:check   # bundle for Cloudflare without deploying
+```
+
+## Architecture
+
+One Cloudflare Worker renders HTML and serves the small API. D1 stores events, private proposals, hashed login tokens, sessions, and rate limits. A separate private R2 bucket stores uploaded WebP artwork. JavaScript is used for the admin and proposal forms; the programme, navigation, event pages, archive, and calendar links work without it.
+
+Shared code is pinned at `shared/dust-wave-platform` commit `0f84a675deb9577648b35ae0fd0ebed5e9abcb60`:
+
+- `@dustwave/worker-core` **0.15.0**: request bounds, security headers, cookies, origin checks, crypto, time-zone conversion, and Turnstile verification.
+- `@dustwave/admin-shell` **0.12.0**: API client, unsaved-change lifecycle, and accessible confirmation dialog.
+- `@dustwave/test-core` **0.3.1**: immutable dependency verification in tests.
+
+Microcinema owns its model, storage, admin allowlist, sessions, routes, and deployment. It does not read or mutate the existing Dust Wave Community or Writers Group database.
+
+### Content rules
+
+- English event title and description are required; empty Spanish fields fall back to English.
+- Each event has one start/end interval in `America/Denver`; overnight events are supported. Repeated or skipped daylight-saving hours are rejected rather than guessed.
+- Page addresses are fixed after the first save. Past events move to the archive after their end time.
+- Removal hides an event and its calendar file. Restore returns it as a draft. Cancellation retains a public notice and an ICS cancellation status.
+- A public proposal is private until an admin turns it into a draft and publishes it. Name/email never enter the public event model. Proposals do not send notifications or subscribe anyone to a mailing list.
+- Descriptions are plain text with paragraphs. Film metadata, audience notes, and guest information can be written in the details/description fields.
+- Uploads are limited to JPEG/PNG/WebP, converted in the browser to a maximum 1,600-pixel WebP, and bounded and signature-checked by the Worker. Draft uploads require an admin session to read; published event artwork is public.
+- Calendar files follow RFC 5545 escaping, CRLF and UTF-8 byte-folding rules. Downloaded files are snapshots, not a subscribed calendar feed.
+
+## Production setup
+
+See [DEPLOYMENT.md](DEPLOYMENT.md). The checked-in D1 ID is an explicit placeholder. No production database, domain, Turnstile key, or email delivery is provisioned by running the build or local preview.
+
+Design references and asset notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Validation evidence is in [VALIDATION.md](VALIDATION.md).

@@ -3,7 +3,7 @@ import { mountUnsavedChangesGuard } from "@dustwave/admin-shell/unsaved-changes"
 import { copy } from "./copy.js";
 import { mountConfirmationDialog } from "@dustwave/admin-shell/confirmation-dialog";
 import { field } from "./render.js";
-import { escape as x } from "./domain.js";
+import { escape as x, isSeries, expandEvents, occurrence } from "./domain.js";
 const lang = document.documentElement.lang,
   t = copy[lang],
   prefix = lang === "es" ? "/es" : "";
@@ -65,7 +65,7 @@ function dateText(e) {
 }
 function renderLists() {
   const row = (e) =>
-    `<article class="admin-row"><div><span class="status">${x(t[e.status] || e.status)}</span><h3>${x(e.title)}</h3><p class="mono">${x(dateText(e))}</p></div><div class="actions">${e.status === "removed" ? `<button class="button" data-restore="${e.id}">${t.restore}</button>` : `<button class="button" data-edit="${e.id}">${t.edit}</button><button class="button danger" data-remove="${e.id}">${t.remove}</button>${e.status === "published" || e.status === "cancelled" ? `<a class="text-link" href="${prefix}/events/${e.slug}" target="_blank" rel="noopener">${t.preview} ↗</a>` : ""}`}</div></article>`;
+    `<article class="admin-row"><div><span class="status">${x(t[e.status] || e.status)}</span><h3>${x(e.title)}</h3><p class="mono">${x(isSeries(e) ? t[e.repeat] : dateText(e))}${e.repeatUntil ? ` · ${t.repeatUntil}: ${x(e.repeatUntil)}` : ""}</p></div><div class="actions">${e.status === "removed" ? `<button class="button" data-restore="${e.id}">${t.restore}</button>` : `<button class="button" data-edit="${e.id}">${t.edit}</button><button class="button danger" data-remove="${e.id}">${t.remove}</button>${e.status === "published" || e.status === "cancelled" ? `<a class="text-link" href="${prefix}/events/${e.slug}" target="_blank" rel="noopener">${t.preview} ↗</a>` : ""}`}</div></article>`;
   $("#event-list").innerHTML =
     events
       .filter((e) => e.status !== "removed")
@@ -101,6 +101,64 @@ const slugFromTitle = (title) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, 100);
+function meetingEditor(event) {
+  if (!isSeries(event)) return "";
+  const dates = new Set([
+    ...expandEvents([event]).map((meeting) => meeting.occurrenceDate),
+    ...(event.exceptions || []).map((exception) => exception.on),
+  ]);
+  return `<fieldset id="meeting-editor"><legend>${t.meetings}</legend><p class="small-note">${t.meetingsHelp}</p>${[
+    ...dates,
+  ]
+    .sort()
+    .map((on) => {
+      const meeting = occurrence({ ...event, repeatUntil: "" }, on);
+      const f = (name, label, type) =>
+        field(`meeting-${on}-${name}`, label, {
+          type,
+          value: meeting[name],
+          required: true,
+        });
+      return `<details class="meeting-editor" data-meeting="${on}"><summary>${x(dateText(meeting))}${meeting.status === "cancelled" ? ` · ${t.cancelled}` : ""}</summary><p class="small-note">${t.originalDate}: ${on}</p><div class="form-grid four">${f("date", t.date, "date")}${f("time", t.time, "time")}${f("endDate", t.endDate, "date")}${f("endTime", t.endTime, "time")}</div>${field(
+        `meeting-${on}-cancelled`,
+        t.meetingStatus,
+        {
+          value: String(
+            event.exceptions?.find((item) => item.on === on)?.cancelled ||
+              false,
+          ),
+          options: [
+            ["false", t.scheduled],
+            ["true", t.cancelled],
+          ],
+        },
+      )}<button type="button" class="button" data-reset-meeting="${on}">${t.resetMeeting}</button></details>`;
+    })
+    .join("")}</fieldset>`;
+}
+function readExceptions(form, event) {
+  if (!isSeries(event)) return [];
+  const result = new Map(
+    (event.exceptions || []).map((item) => [item.on, item]),
+  );
+  for (const row of form.querySelectorAll("[data-meeting]")) {
+    const on = row.dataset.meeting;
+    const base = occurrence({ ...event, exceptions: [], repeatUntil: "" }, on);
+    const item = { on };
+    for (const key of ["date", "time", "endDate", "endTime"])
+      item[key] = form.elements[`meeting-${on}-${key}`].value;
+    item.cancelled = form.elements[`meeting-${on}-cancelled`].value === "true";
+    if (
+      !item.cancelled &&
+      ["date", "time", "endDate", "endTime"].every(
+        (key) => item[key] === base[key],
+      )
+    )
+      result.delete(on);
+    else result.set(on, item);
+  }
+  return [...result.values()];
+}
 async function openEditor(event = null, proposal = null) {
   if (!(await confirmMove())) return;
   const e = event || {
@@ -108,6 +166,7 @@ async function openEditor(event = null, proposal = null) {
     revision: 0,
     status: "draft",
     mode: "walkin",
+    repeat: "none",
     title: proposal?.title || "",
     slug: slugFromTitle(proposal?.title || ""),
     description: proposal?.description || "",
@@ -120,7 +179,18 @@ async function openEditor(event = null, proposal = null) {
   dirty = false;
   const f = (name, label, options = {}) =>
     field(name, label, { value: e[name] || "", ...options });
-  editor.innerHTML = `<div class="editor-heading"><h2 tabindex="-1">${event ? t.editEvent : t.newEvent}</h2><button type="button" class="button" id="close-editor">${t.close} ×</button></div><form id="event-form"><p class="small-note">${t.requiredHint} ${t.timezone}</p><div class="form-grid">${f("title", t.title + " · " + t.english, { required: true, max: 160 })}${f("slug", t.slug, { required: true, max: 100, help: t.slugHelp, disabled: !!event })}</div>${f("description", t.description + " · " + t.english, { required: true, rows: 6, max: 12000 })}${f("details", t.details, { max: 400, help: t.detailsHelp })}<div class="form-grid four">${f("date", t.date, { required: true, type: "date" })}${f("time", t.time, { required: true, type: "time" })}${f("endDate", t.endDate, { required: true, type: "date" })}${f("endTime", t.endTime, { required: true, type: "time" })}</div><div class="form-grid">${f(
+  editor.innerHTML = `<div class="editor-heading"><h2 tabindex="-1">${event ? t.editEvent : t.newEvent}</h2><button type="button" class="button" id="close-editor">${t.close} ×</button></div><form id="event-form"><p class="small-note">${t.requiredHint} ${t.timezone}</p><div class="form-grid">${f("title", t.title + " · " + t.english, { required: true, max: 160 })}${f("slug", t.slug, { required: true, max: 100, help: t.slugHelp, disabled: !!event })}</div>${f("description", t.description + " · " + t.english, { required: true, rows: 6, max: 12000 })}${f("details", t.details, { max: 400, help: t.detailsHelp })}<div class="form-grid four">${f("date", t.date, { required: true, type: "date" })}${f("time", t.time, { required: true, type: "time" })}${f("endDate", t.endDate, { required: true, type: "date" })}${f("endTime", t.endTime, { required: true, type: "time" })}</div>${f(
+    "repeat",
+    t.repeat,
+    {
+      options: [
+        ["none", t.noRepeat],
+        ["weekly", t.weekly],
+        ["fortnightly", t.fortnightly],
+      ],
+      help: isSeries(e) ? t.seriesHelp : t.repeatHelp,
+    },
+  )}<div id="recurrence-options">${f("repeatUntil", t.repeatUntil, { type: "date", help: t.repeatUntilHelp })}</div>${meetingEditor(e)}<div class="form-grid">${f(
     "mode",
     t.mode,
     {
@@ -130,7 +200,7 @@ async function openEditor(event = null, proposal = null) {
         ["rsvp", t.rsvp],
       ],
     },
-  )}${f("price", t.price, { help: t.priceHelp, max: 100 })}</div><div id="url-field">${f("url", t.link, { type: "url", max: 2048 })}</div><fieldset><legend>${t.artwork}</legend>${f("upload", t.artwork, { type: "file", help: t.artworkHelp })}<input type="hidden" name="image" value="${x(e.image)}"><img id="art-preview" class="art-preview" ${e.image ? `src="${x(e.image)}"` : "hidden"} alt=""><button class="button" type="button" id="remove-image" ${e.image ? "" : "hidden"}>${t.removeImage}</button>${f("imageAlt", t.alt, { max: 250 })}<p id="upload-status" role="status"></p></fieldset><details class="translation"><summary>${t.spanish}</summary><p class="small-note">${t.spanishHelp}</p>${f("titleEs", t.title + " · " + t.spanish, { max: 160 })}${f("descriptionEs", t.description + " · " + t.spanish, { rows: 6, max: 12000 })}${f("detailsEs", t.details + " · " + t.spanish, { max: 400 })}${f("priceEs", t.price + " · " + t.spanish, { max: 100 })}${f("imageAltEs", t.alt + " · " + t.spanish, { max: 250 })}</details>${f(
+  )}${f("price", t.price, { help: t.priceHelp, max: 100 })}</div><div id="url-field">${f("url", t.link, { type: "url", max: 2048 })}</div><div class="form-grid">${f("infoUrl", t.infoUrl, { type: "url", max: 2048 })}${f("infoLabel", t.infoLabel, { max: 80 })}</div><fieldset><legend>${t.artwork}</legend>${f("upload", t.artwork, { type: "file", help: t.artworkHelp })}<input type="hidden" name="image" value="${x(e.image)}"><img id="art-preview" class="art-preview" ${e.image ? `src="${x(e.image)}"` : "hidden"} alt=""><button class="button" type="button" id="remove-image" ${e.image ? "" : "hidden"}>${t.removeImage}</button>${f("imageAlt", t.alt, { max: 250 })}<p id="upload-status" role="status"></p></fieldset><details class="translation"><summary>${t.spanish}</summary><p class="small-note">${t.spanishHelp}</p>${f("titleEs", t.title + " · " + t.spanish, { max: 160 })}${f("descriptionEs", t.description + " · " + t.spanish, { rows: 6, max: 12000 })}${f("detailsEs", t.details + " · " + t.spanish, { max: 400 })}${f("priceEs", t.price + " · " + t.spanish, { max: 100 })}${f("imageAltEs", t.alt + " · " + t.spanish, { max: 250 })}${f("infoUrlEs", t.infoUrl + " · " + t.spanish, { type: "url", max: 2048 })}${f("infoLabelEs", t.infoLabel + " · " + t.spanish, { max: 80 })}</details>${f(
     "status",
     t.status,
     {
@@ -151,6 +221,25 @@ async function openEditor(event = null, proposal = null) {
     form.elements.url.required = needsLink;
   };
   syncMode();
+  const syncRepeat = () => {
+    $("#recurrence-options").hidden = form.elements.repeat.value === "none";
+  };
+  syncRepeat();
+  form.elements.repeat.addEventListener("change", syncRepeat);
+  if (isSeries(e)) {
+    form.elements.date.readOnly = true;
+    form.elements.repeat.disabled = true;
+  }
+  form.querySelectorAll("[data-reset-meeting]").forEach((button) => {
+    button.onclick = () => {
+      const on = button.dataset.resetMeeting;
+      const base = occurrence({ ...e, exceptions: [], repeatUntil: "" }, on);
+      for (const key of ["date", "time", "endDate", "endTime"])
+        form.elements[`meeting-${on}-${key}`].value = base[key];
+      form.elements[`meeting-${on}-cancelled`].value = "false";
+      dirty = true;
+    };
+  });
   form.addEventListener("input", () => {
     dirty = true;
   });
@@ -237,6 +326,9 @@ async function openEditor(event = null, proposal = null) {
     $("#editor-status").textContent = "";
     const data = { ...editing, ...Object.fromEntries(new FormData(form)) };
     delete data.upload;
+    data.exceptions = readExceptions(form, e);
+    for (const key of Object.keys(data))
+      if (key.startsWith("meeting-")) delete data[key];
     try {
       const result = await api.request("/admin/events", {
         method: "POST",

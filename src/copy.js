@@ -1,5 +1,35 @@
 export const copy = {
   en: {
+    moreInfo: "More information",
+    infoUrl: "More information URL (optional)",
+    infoLabel: "Link text (optional)",
+    repeat: "Repeat",
+    noRepeat: "Does not repeat",
+    weekly: "Every week",
+    fortnightly: "Every other week",
+    repeatHelp:
+      "Each meeting gets its own listing for the next three months. Save the series to manage individual dates.",
+    seriesHelp:
+      "Changes here apply to the whole series. The first date and repeat pattern stay fixed. To change the pattern, end this series and create another.",
+    repeatUntil: "Repeat until",
+    repeatUntilHelp:
+      "Optional. Include meetings through this date, or leave blank to keep repeating.",
+    meetings: "Individual meetings",
+    meetingsHelp:
+      "Upcoming meetings for the next three months, plus any dates you have changed. Cancel or reschedule a meeting here, then save the event.",
+    originalDate: "Originally scheduled for",
+    meetingStatus: "Meeting status",
+    scheduled: "Scheduled",
+    resetMeeting: "Reset to series schedule",
+    invalid_repeat: "Choose a supported repeat schedule.",
+    series_locked:
+      "The first date and repeat pattern stay fixed. End this series and create another to change the pattern.",
+    invalid_repeat_end:
+      "The repeat end date must be on or after the first meeting, and no later than 2100.",
+    invalid_exception:
+      "Check the individual meeting dates. Each must belong to the series, with no duplicates (up to 100 changed dates).",
+    recurrence_time:
+      "Recurring Sunday events cannot start or end from 1–2:59 a.m. because of daylight saving changes.",
     programme: "Events",
     archive: "Archive",
     visit: "Visit us",
@@ -61,7 +91,7 @@ export const copy = {
     linkSent:
       "If this address has access, a sign-in link is on its way. It expires in 15 minutes.",
     localLink: "Open local test sign-in",
-    localNote: "Local preview · sample events, not real announcements.",
+    localNote: "Local preview · includes clearly marked sample events.",
     events: "Events",
     proposals: "Proposals",
     add: "Add event",
@@ -153,6 +183,36 @@ export const copy = {
     venueNote: "30 SEATS\nDUST WAVE STUDIO",
   },
   es: {
+    moreInfo: "Más información",
+    infoUrl: "URL con más información (opcional)",
+    infoLabel: "Texto del enlace (opcional)",
+    repeat: "Repetir",
+    noRepeat: "No se repite",
+    weekly: "Cada semana",
+    fortnightly: "Cada dos semanas",
+    repeatHelp:
+      "Cada reunión tiene su propio anuncio para los próximos tres meses. Guarda la serie para modificar fechas individuales.",
+    seriesHelp:
+      "Estos cambios afectan a toda la serie. La primera fecha y el patrón quedan fijos. Para cambiar el patrón, termina esta serie y crea otra.",
+    repeatUntil: "Repetir hasta",
+    repeatUntilHelp:
+      "Opcional. Incluye reuniones hasta esta fecha. Déjalo vacío para seguir repitiendo.",
+    meetings: "Reuniones individuales",
+    meetingsHelp:
+      "Reuniones de los próximos tres meses y fechas que has modificado. Cancela o cambia una reunión aquí y después guarda el evento.",
+    originalDate: "Fecha original",
+    meetingStatus: "Estado de la reunión",
+    scheduled: "Programada",
+    resetMeeting: "Restablecer la fecha de la serie",
+    invalid_repeat: "Elige una opción de repetición válida.",
+    series_locked:
+      "La primera fecha y el patrón quedan fijos. Termina esta serie y crea otra para cambiar el patrón.",
+    invalid_repeat_end:
+      "La fecha final debe ser igual o posterior a la primera reunión y no superar el año 2100.",
+    invalid_exception:
+      "Revisa las fechas individuales. Deben pertenecer a la serie, sin duplicados (hasta 100 fechas modificadas).",
+    recurrence_time:
+      "Las reuniones recurrentes del domingo no pueden comenzar ni terminar entre la 1 y las 2:59 a. m. por los cambios de horario.",
     programme: "Eventos",
     archive: "Archivo",
     visit: "Visítanos",
@@ -216,7 +276,8 @@ export const copy = {
     linkSent:
       "Si esta dirección tiene acceso, recibirá un enlace que caduca en 15 minutos.",
     localLink: "Abrir acceso de prueba local",
-    localNote: "Vista previa local · eventos de ejemplo, no anuncios reales.",
+    localNote:
+      "Vista previa local · incluye eventos de ejemplo identificados como tales.",
     events: "Eventos",
     proposals: "Propuestas",
     add: "Añadir evento",

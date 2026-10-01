@@ -8,6 +8,10 @@ import {
   calendar,
   escape,
   ADDRESS,
+  isSeries,
+  occurrence,
+  expandEvents,
+  windowEnd,
 } from "./domain.js";
 import {
   auth,
@@ -271,7 +275,11 @@ export default {
           { headers: { "Content-Type": "text/plain" } },
         );
       else if (path === "/sitemap.xml") {
-        const events = await allEvents(env);
+        const records = await allEvents(env);
+        const events = [
+          ...expandEvents(records),
+          ...expandEvents(records, { archive: true }),
+        ];
         const paths = [
           "/",
           "/archive",
@@ -292,22 +300,40 @@ export default {
       else if (path === "/privacy") response = html(privacyPage(lang, env));
       else if (path === "/admin" || path === "/admin/")
         response = html(adminPage(lang, env));
-      else if (/^\/events\/[a-z0-9-]+(?:\.ics)?$/.test(path)) {
+      else if (
+        /^\/events\/[a-z0-9-]+(?:\/\d{4}-\d{2}-\d{2})?(?:\.ics)?$/.test(path)
+      ) {
         const isCalendar = path.endsWith(".ics"),
-          slug = path.slice(8).replace(/\.ics$/, "");
-        const e = parse(
+          [slug, on] = path
+            .slice(8)
+            .replace(/\.ics$/, "")
+            .split("/");
+        const record = parse(
           await env.DB.prepare(
             "SELECT * FROM events WHERE slug=? AND status IN ('published','cancelled')",
           )
             .bind(slug)
             .first(),
         );
+        let e = record;
+        if (record && isSeries(record)) {
+          e = on
+            ? occurrence(record, on)
+            : expandEvents([record])[0] ||
+              expandEvents([record], { archive: true })[0];
+          if (e?.date > windowEnd()) e = null;
+          if (e && !on)
+            return Response.redirect(
+              `${origin(env)}${lang === "es" ? "/es" : ""}/events/${e.slug}${isCalendar ? ".ics" : ""}`,
+              302,
+            );
+        } else if (on) e = null;
         if (!e) response = html(notFound(lang, env), 404);
         else if (isCalendar)
           response = new Response(calendar(e, origin(env), lang), {
             headers: headers({
               "Content-Type": "text/calendar; charset=utf-8",
-              "Content-Disposition": `attachment; filename="${slug}.ics"`,
+              "Content-Disposition": `attachment; filename="${slug}${on ? "-" + on : ""}.ics"`,
             }),
           });
         else response = html(eventPage(e, lang, env));

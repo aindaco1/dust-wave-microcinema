@@ -1,5 +1,11 @@
 import { copy } from "./copy.js";
-import { escape as x, localized, ZONE, ADDRESS } from "./domain.js";
+import {
+  escape as x,
+  localized,
+  expandEvents,
+  ZONE,
+  ADDRESS,
+} from "./domain.js";
 import { local, origin } from "./security.js";
 export const pathFor = (lang, path = "/") =>
   (lang === "es" ? "/es" : "") + path;
@@ -109,15 +115,8 @@ function eventRow(event, lang, index) {
   return `<article class="event-row"><div class="event-number mono">${String(index).padStart(2, "0")}</div><div class="event-date mono"><time datetime="${e.startsAt}">${x(dateLabel(e.startsAt, lang, { month: "short", day: "2-digit" }))}</time><span>${timeLabel(e.startsAt, lang)}</span></div><div class="event-info"><h3><a href="${url}">${x(e.title)}</a></h3><p>${x(e.details || e.description.slice(0, 160))}</p></div><div class="row-action"><span class="mono">${e.status === "cancelled" ? t.cancelled : x(e.price || (e.mode === "walkin" ? t.walkin : ""))}</span><a href="${url}" aria-label="${x(t.more + ": " + e.title)}">${t.more} ↗</a></div></article>`;
 }
 export function programme(events, lang, env, archive = false) {
-  const t = copy[lang],
-    now = new Date().toISOString();
-  const list = events
-    .filter((e) => (archive ? e.endsAt < now : e.endsAt >= now))
-    .sort((a, b) =>
-      archive
-        ? b.startsAt.localeCompare(a.startsAt)
-        : a.startsAt.localeCompare(b.startsAt),
-    );
+  const t = copy[lang];
+  const list = expandEvents(events, { archive });
   const first = list[0] && localized(list[0], lang);
   const remaining = archive ? list : list.slice(1);
   let body = archive
@@ -148,7 +147,7 @@ export function eventPage(event, lang, env) {
     description: e.description.slice(0, 250),
     image: e.image,
     env,
-    body: `<a class="back-link mono" href="${pathFor(lang, e.endsAt < new Date().toISOString() ? "/archive" : "/")}">← ${t.back}</a><article class="event-detail"><header><p class="eyebrow">${dateLabel(e.startsAt, lang, { weekday: "long", year: "numeric" })}</p><h1>${x(e.title)}</h1><p class="film-details">${x(e.details)}</p></header><div class="detail-grid">${artwork(e, lang)}<aside class="event-facts"><dl><dt>${t.when}</dt><dd>${dateLabel(e.startsAt, lang)}<br>${timeLabel(e.startsAt, lang)}–${timeLabel(e.endsAt, lang)}${e.date !== e.endDate ? `<br>${dateLabel(e.endsAt, lang)}` : ""}</dd><dt>${t.where}</dt><dd>Dust Wave Microcinema<br>${ADDRESS}</dd><dt>${t.admission}</dt><dd>${x(e.price || (e.mode === "tickets" ? t.tickets : e.mode === "rsvp" ? t.rsvp : t.walkin))}</dd></dl><div class="actions">${cta(e, lang)}</div><p class="small-note">${t.timezone}</p></aside></div><div class="prose event-prose">${paragraphs(e.description)}</div></article>`,
+    body: `<a class="back-link mono" href="${pathFor(lang, e.endsAt < new Date().toISOString() ? "/archive" : "/")}">← ${t.back}</a><article class="event-detail"><header><p class="eyebrow">${dateLabel(e.startsAt, lang, { weekday: "long", year: "numeric" })}</p><h1>${x(e.title)}</h1><p class="film-details">${x(e.details)}</p></header><div class="detail-grid">${artwork(e, lang)}<aside class="event-facts"><dl><dt>${t.when}</dt><dd>${dateLabel(e.startsAt, lang)}<br>${timeLabel(e.startsAt, lang)}–${timeLabel(e.endsAt, lang)}${e.date !== e.endDate ? `<br>${dateLabel(e.endsAt, lang)}` : ""}</dd><dt>${t.where}</dt><dd>Dust Wave Microcinema<br>${ADDRESS}</dd><dt>${t.admission}</dt><dd>${x(e.price || (e.mode === "tickets" ? t.tickets : e.mode === "rsvp" ? t.rsvp : t.walkin))}</dd></dl><div class="actions">${cta(e, lang)}</div><p class="small-note">${t.timezone}</p></aside></div><div class="prose event-prose">${paragraphs(e.description)}${e.infoUrl ? `<p><a class="text-link" href="${x(e.infoUrl)}" rel="noopener">${x(e.infoLabel || t.moreInfo)} ↗</a></p>` : ""}</div></article>`,
   });
 }
 export function visitPage(lang, env) {

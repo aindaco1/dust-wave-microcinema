@@ -1,5 +1,5 @@
 import { Miniflare, convertV4MiniflareOptions } from "miniflare";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 export async function runtime({
   port = 0,
   persist = false,
@@ -65,11 +65,30 @@ export async function runtime({
   );
   await mf.ready;
   const db = await mf.getD1Database("DB");
-  const migration = await readFile("migrations/0001_initial.sql", "utf8");
-  for (const statement of migration
-    .split(";")
-    .map((s) => s.trim())
-    .filter(Boolean))
-    await db.prepare(statement).run();
+  await db
+    .prepare(
+      "CREATE TABLE IF NOT EXISTS local_migrations (name TEXT PRIMARY KEY)",
+    )
+    .run();
+  for (const name of (await readdir("migrations"))
+    .filter((name) => name.endsWith(".sql"))
+    .sort()) {
+    if (
+      await db
+        .prepare("SELECT name FROM local_migrations WHERE name=?")
+        .bind(name)
+        .first()
+    )
+      continue;
+    const migration = await readFile(`migrations/${name}`, "utf8");
+    const statements = migration
+      .split(/;\s*(?:\n|$)/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    await db.batch([
+      ...statements.map((sql) => db.prepare(sql)),
+      db.prepare("INSERT INTO local_migrations(name) VALUES (?)").bind(name),
+    ]);
+  }
   return { mf, db, origin };
 }

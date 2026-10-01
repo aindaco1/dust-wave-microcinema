@@ -12,8 +12,17 @@
 - Source formatting and dependency audit.
 - Vector revision: original Dust Wave glove retained, film-reel variation applied to header/footer/placeholders, small-size favicon, live-text master and outlined web illustration, PNG exports and source notes. English copy uses US spelling; Spanish follows the rewritten meaning.
 
-The public preview contains explicitly labeled fictional program data. Live email delivery, live Turnstile, production resources, domain routing, and physical calendar-app import remain unverified until deployment.
+The local preview contains the imported Writers Group alongside explicitly labeled fictional program data. Live email delivery, live Turnstile, production resources, domain routing, and physical calendar-app import remain unverified until deployment.
 
 ## Deployment state
 
 The custom domain resolves to Cloudflare nameservers. The local Wrangler login is expired and cannot refresh non-interactively. No production deployment or resource provisioning has been performed. The checked-in D1 ID remains a placeholder.
+
+## Recurring events — October 1, 2026
+
+- One-time English/Spanish Writers Group import, managed independently after import; restart preserves admin edits.
+- Weekly/every-other-week recurrence projected three calendar months ahead, including month-end clamping, automatic rollover, archive entries, inclusive optional end date, overnight meetings, and Albuquerque daylight-saving changes.
+- Stable per-meeting URLs and calendar UIDs through rescheduling; one VEVENT per download, with cancellation status and increasing revision.
+- Integration checks cover recurrence creation, drafts and removed-series privacy, public English/Spanish pages, information links, the sitemap, end-date filtering, and optimistic edit conflicts.
+- Browser checks: save and clear an end date; cancel, move, and reset a meeting; verify the public result and restore Writers Group to its normal schedule.
+- Desktop and phone public/admin layouts reviewed at 1280px and 375px; no horizontal overflow in the expanded meeting editor. Spanish event details and the localized Writers Group information link were verified.

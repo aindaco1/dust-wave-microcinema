@@ -7,7 +7,7 @@ console.log(
   "Admin: http://localhost:8793/admin/ — alonso@dustwave.xyz (local test link; no email sent)",
 );
 console.log(
-  "Sample events are local only. The production migration creates an empty program.",
+  "Writers Group is imported once. Any sample events are local only. Changes persist in this local database.",
 );
 process.on("SIGINT", async () => {
   await mf.dispose();

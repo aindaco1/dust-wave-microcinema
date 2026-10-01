@@ -26,6 +26,7 @@ npm ci
 npm run check
 npm run format:check
 npm run deploy:check
+# Includes the one-time Writers Group import.
 npx wrangler d1 migrations apply DB --remote
 npm run deploy
 ```
@@ -39,7 +40,8 @@ npm run deploy
 - Verify English and Spanish event URLs, external ticket/RSVP destinations, and downloaded `.ics` times in a calendar application.
 - Submit a proposal with the real Turnstile widget; verify its private admin record and its absence from public pages and sitemap.
 - Check desktop and phone layouts, HTTPS, response headers, and the real venue information.
-- Publish actual events through admin. Never import `scripts/demo.mjs` into production.
+- Check the imported Writers Group series in admin, including its repeat schedule, optional end date, individual-date changes, and upcoming three-month window.
+- Publish other actual events through admin. Never import `scripts/demo.mjs` into production.
 
 The old `dustwave.xyz/microcinema.html` page and its Community system require an explicit cutover decision before changing or redirecting them.
 

@@ -280,5 +280,5 @@ test("production fails closed without challenge configuration and never exposes 
     await mf.dispatchFetch("https://dustwavemicrocinema.com/")
   ).text();
   assert(!page.includes(copy.en.localNote));
-  assert(page.includes(copy.en.empty));
+  assert(page.includes("Writers Group"));
 });

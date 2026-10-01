@@ -17,9 +17,22 @@ test("local event data and uploaded images survive a complete runtime restart", 
     await (
       await instance.mf.getR2Bucket("IMAGES")
     ).put("durable.webp", "durable-image");
+    await instance.db
+      .prepare(
+        "UPDATE events SET status='draft',revision=2 WHERE slug='writers-group'",
+      )
+      .run();
     await instance.mf.dispose();
     instance = null;
     instance = await runtime({ persist: path });
+    assert.equal(
+      (
+        await instance.db
+          .prepare("SELECT status FROM events WHERE slug='writers-group'")
+          .first()
+      ).status,
+      "draft",
+    );
     assert.equal(
       (
         await instance.db

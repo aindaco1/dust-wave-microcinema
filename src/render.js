@@ -24,6 +24,8 @@ const paragraphs = (s) =>
     .split(/\n\s*\n/)
     .map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`)
     .join("");
+const detailList = (items) =>
+  `<ul class="visit-details">${items.map((item) => `<li>${x(item)}</li>`).join("")}</ul>`;
 export function field(
   name,
   label,
@@ -119,7 +121,7 @@ export function programme(events, lang, env, archive = false) {
   const first = list[0] && localized(list[0], lang);
   const remaining = archive ? list : list.slice(1);
   let body = archive
-    ? `<section class="section-heading"><span class="mono">${lang === "es" ? "EL ARCHIVO" : "THE ARCHIVE"}</span><h1>${t.archive}</h1><p>${t.archiveIntro}</p></section>`
+    ? `<section class="section-heading"><span class="mono">${lang === "es" ? "EL ARCHIVO" : "THE ARCHIVE"}</span><h1>${t.archive}</h1></section>`
     : `<h1 class="visually-hidden">${t.programme}</h1>`;
   if (first && !archive)
     body += `<section class="featured">${artwork(first, lang)}<div class="feature-copy"><span class="eyebrow">${t.next}</span><p class="feature-date mono">${dateLabel(first.startsAt, lang, { weekday: "short" })} <span> / </span> ${timeLabel(first.startsAt, lang)}</p><h2><a href="${pathFor(lang, `/events/${first.slug}`)}">${x(first.title)}</a></h2><p class="film-details">${x(first.details)}</p><p class="feature-description">${x(first.description.length > 320 ? first.description.slice(0, 317) + "…" : first.description)}</p><p class="admission-label mono">${x(first.price)}</p><div class="actions">${cta(first, lang, { secondary: false })}</div><a class="text-link" href="${pathFor(lang, `/events/${first.slug}`)}">${t.readMore} →</a></div></section>`;
@@ -156,7 +158,7 @@ export function visitPage(lang, env) {
     path: "/visit",
     title: t.visit,
     env,
-    body: `<h1 class="visually-hidden">${t.visit}</h1><div class="visit-grid"><figure class="visit-figure"><div class="photo-frame"><img class="room-photo" src="/assets/room.webp" alt="${lang === "es" ? "La sala del Microcine Dust Wave" : "The Dust Wave Microcinema screening room"}" width="1200" height="800"></div><figcaption><span>FIG. 01</span><span>DUST WAVE HQ</span></figcaption></figure><div class="prose"><h2 class="eyebrow">${t.room}</h2><ul class="room-details"><li>${x(t.roomLocation)} ${x(ADDRESS)}.</li>${t.roomDetails.map((detail) => `<li>${x(detail)}</li>`).join("")}</ul><a class="button" href="https://maps.google.com/?q=709+Haines+Ave+NW+Albuquerque+NM+87102" rel="noopener">${t.directions} ↗</a><p>${t.access} <a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a>.</p></div></div><div class="visit-grid parking"><div class="prose"><h2 class="eyebrow">${t.parking}</h2><p>${t.parkingBody}</p></div><figure class="visit-figure"><div class="photo-frame"><img src="/assets/parking.webp" alt="${lang === "es" ? "Mapa: no estacionar frente al estudio; estacionamiento al otro lado de Haines y en las calles 7 y 8." : "Parking map: keep the studio curb clear; park across Haines or on 7th and 8th Streets."}" loading="lazy" width="1000" height="800"></div><figcaption><span>FIG. 02</span><span>${t.parking}</span></figcaption></figure></div>`,
+    body: `<h1 class="visually-hidden">${t.visit}</h1><div class="visit-grid"><figure class="visit-figure"><div class="photo-frame"><img class="room-photo" src="/assets/room.webp" alt="${lang === "es" ? "La sala del Microcine Dust Wave" : "The Dust Wave Microcinema screening room"}" width="1200" height="800"></div><figcaption><span>FIG. 01</span><span>DUST WAVE HQ</span></figcaption></figure><div class="prose"><h2 class="eyebrow">${t.room}</h2>${detailList([`${t.roomLocation} ${ADDRESS}.`, ...t.roomDetails])}<a class="button" href="https://maps.google.com/?q=709+Haines+Ave+NW+Albuquerque+NM+87102" rel="noopener">${t.directions} ↗</a><p>${t.access} <a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a>.</p></div></div><div class="visit-grid parking"><div class="prose"><h2 class="eyebrow">${t.parking}</h2>${detailList(t.parkingDetails)}</div><figure class="visit-figure"><div class="photo-frame"><img src="/assets/parking.webp" alt="${lang === "es" ? "Mapa: no estacionar frente al estudio; estacionamiento al otro lado de Haines y en las calles 7 y 8." : "Parking map: keep the studio curb clear; park across Haines or on 7th and 8th Streets."}" loading="lazy" width="1000" height="800"></div><figcaption><span>FIG. 02</span><span>${t.parking}</span></figcaption></figure></div>`,
   });
 }
 export function proposalPage(lang, env) {

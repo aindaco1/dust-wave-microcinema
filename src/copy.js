@@ -25,7 +25,6 @@ export const copy = {
     emptyBody:
       "We’ll post the next events here. In the meantime, take a look at the space or send us an idea for something you’d like to host.",
     archiveEmpty: "No past events yet.",
-    archiveIntro: "The films we’ve screened and the events we’ve hosted.",
     room: "THE ROOM",
     roomLocation: "The Dust Wave Microcinema is located at",
     roomDetails: [
@@ -34,8 +33,11 @@ export const copy = {
       "There’s a donation box if you’d like to help keep the space going.",
     ],
     parking: "PARKING",
-    parkingBody:
-      "Please keep the curb in front of the studio clear. Trucks need to get in and out of the warehouse. You can park across Haines Avenue or along 7th or 8th Street. Give yourself a few extra minutes to park and walk over.",
+    parkingDetails: [
+      "Please keep the curb in front of the studio clear. Trucks need to get in and out of the warehouse.",
+      "You can park across Haines Avenue or along 7th or 8th Street.",
+      "Give yourself a few extra minutes to park and walk over.",
+    ],
     directions: "Get directions",
     access: "For accessibility questions or info about renting the room, email",
     proposeTitle: "Have an idea for an event?",
@@ -176,8 +178,6 @@ export const copy = {
     emptyBody:
       "Publicaremos los próximos eventos aquí. Mientras tanto, conoce el espacio o mándanos una idea de lo que te gustaría organizar.",
     archiveEmpty: "Todavía no hay eventos anteriores.",
-    archiveIntro:
-      "Las películas que hemos proyectado y los eventos que hemos organizado.",
     room: "LA SALA",
     roomLocation: "El Microcine Dust Wave está ubicado en",
     roomDetails: [
@@ -186,8 +186,11 @@ export const copy = {
       "Hay una caja de donaciones si quieres ayudarnos a mantener el espacio.",
     ],
     parking: "ESTACIONAMIENTO",
-    parkingBody:
-      "Por favor, deja libre el frente del estudio. Los camiones necesitan entrar y salir del almacén. Puedes estacionar al otro lado de Haines Avenue o en las calles 7 y 8. Ven con unos minutos de margen para estacionar y caminar hasta la sala.",
+    parkingDetails: [
+      "Por favor, deja libre el frente del estudio. Los camiones necesitan entrar y salir del almacén.",
+      "Puedes estacionar al otro lado de Haines Avenue o en las calles 7 y 8.",
+      "Ven con unos minutos de margen para estacionar y caminar hasta la sala.",
+    ],
     directions: "Cómo llegar",
     access:
       "Si tienes preguntas sobre accesibilidad o quieres alquilar la sala, escribe a",

@@ -567,14 +567,14 @@ figcaption {
   margin-top: 8px;
   color: var(--muted);
 }
-.room-details {
+.visit-details {
   margin: 12px 0 24px;
   padding-left: 1.1em;
 }
-.room-details li + li {
+.visit-details li + li {
   margin-top: 10px;
 }
-.room-details li::marker {
+.visit-details li::marker {
   color: var(--blue);
   font-size: 0.7em;
 }

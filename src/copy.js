@@ -27,8 +27,12 @@ export const copy = {
     archiveEmpty: "No past events yet.",
     archiveIntro: "The films we’ve screened and the events we’ve hosted.",
     room: "THE ROOM",
-    roomBody:
-      "Our screening room takes up 700 square feet of the Dust Wave studio and seats 30 people. We sell popcorn, snacks, candy, drinks, and Dust Wave merch at events. There’s a donation box, too, if you’d like to help keep the space going.",
+    roomLocation: "The Dust Wave Microcinema is located at",
+    roomDetails: [
+      "Our 700-square-foot screening room seats 30 people.",
+      "We sell popcorn, snacks, candy, drinks, and Dust Wave merch at events.",
+      "There’s a donation box if you’d like to help keep the space going.",
+    ],
     parking: "PARKING",
     parkingBody:
       "Please keep the curb in front of the studio clear. Trucks need to get in and out of the warehouse. You can park across Haines Avenue or along 7th or 8th Street. Give yourself a few extra minutes to park and walk over.",
@@ -175,8 +179,12 @@ export const copy = {
     archiveIntro:
       "Las películas que hemos proyectado y los eventos que hemos organizado.",
     room: "LA SALA",
-    roomBody:
-      "La sala ocupa 700 pies cuadrados del estudio Dust Wave y tiene 30 butacas. En los eventos vendemos palomitas, snacks, dulces, bebidas y productos de Dust Wave. También hay una caja de donaciones si quieres ayudarnos a mantener el espacio.",
+    roomLocation: "El Microcine Dust Wave está ubicado en",
+    roomDetails: [
+      "Nuestra sala ocupa 700 pies cuadrados y tiene 30 butacas.",
+      "En los eventos vendemos palomitas, snacks, dulces, bebidas y productos de Dust Wave.",
+      "Hay una caja de donaciones si quieres ayudarnos a mantener el espacio.",
+    ],
     parking: "ESTACIONAMIENTO",
     parkingBody:
       "Por favor, deja libre el frente del estudio. Los camiones necesitan entrar y salir del almacén. Puedes estacionar al otro lado de Haines Avenue o en las calles 7 y 8. Ven con unos minutos de margen para estacionar y caminar hasta la sala.",

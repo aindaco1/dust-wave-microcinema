@@ -567,9 +567,16 @@ figcaption {
   margin-top: 8px;
   color: var(--muted);
 }
-address {
-  font-style: normal;
-  margin: 20px 0;
+.room-details {
+  margin: 12px 0 24px;
+  padding-left: 1.1em;
+}
+.room-details li + li {
+  margin-top: 10px;
+}
+.room-details li::marker {
+  color: var(--blue);
+  font-size: 0.7em;
 }
 .prose .button {
   margin-bottom: 20px;

@@ -34,18 +34,23 @@ def reel(cx, cy, radius, color=BLUE):
 <circle r="{radius}"/><circle r="{radius*.86:.3f}" stroke-width="{radius*.035:.3f}"/>{holes}<circle r="{radius*.10:.3f}" fill="{color}" stroke="none"/>
 </g>'''
 
-def glove(small=False):
+def glove():
     # Preserve the original hand contours and palm hatching.
     outline = ''.join(f'<path d="{p.get("d")}"/>' for p in paths[:2])
-    optical = ' stroke="#263ad6" stroke-width="80" stroke-linejoin="round"' if small else ' stroke="#263ad6" stroke-width="35" stroke-linejoin="round"'
+    optical = ' stroke="#263ad6" stroke-width="35" stroke-linejoin="round"'
     return f'<g id="dust-wave-glove" transform="translate(0 985) scale(.1 -.1)" fill="{BLUE}"{optical}>{outline}</g>'
 
 mark = glove() + '<g id="film-reels">' + reel(211,196,103) + reel(855,851,88) + '</g>'
 logo = svg('Dust Wave Microcinema', mark, description='The Dust Wave waving glove with two film reels in place of the dust clouds.')
 (ASSETS/'microcinema-mark.svg').write_text(logo)
 (MASTERS/'microcinema-mark.svg').write_text(logo)
-# Favicon: stronger contours and no satellite detail at 16–32 pixels.
-favicon = svg('Dust Wave Microcinema', glove(True), description='Small-size version of the Dust Wave glove.')
+# Favicon: use the source's closed exterior as a solid silhouette. The full
+# outline and palm hatching disappear at 16px, so retain only two broad creases.
+silhouette = paths[0].get('d').split('z', 1)[0] + 'z'
+favicon = svg('Dust Wave Microcinema', f'''<g id="blue-tile"><rect width="64" height="64" rx="12" fill="{BLUE}"/></g>
+<g id="glove-silhouette" transform="translate(4 58) scale(.0052 -.0052)" fill="#ffffff"><path d="{silhouette}"/></g>
+<g id="glove-creases" fill="none" stroke="{BLUE}" stroke-width="3" stroke-linecap="round"><path d="M20 32C28 30 33 35 35 42M18 46C21 51 26 53 32 51"/></g>''',
+    view='0 0 64 64', description='A solid white Dust Wave glove on a cobalt blue tile, simplified for browser tabs.')
 (ASSETS/'icon.svg').write_text(favicon)
 (MASTERS/'icon.svg').write_text(favicon)
 

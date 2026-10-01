@@ -1,13 +1,13 @@
 # Microcinema vector artwork
 
-The Microcinema mark keeps Dust Wave’s original waving glove and replaces the two dust clouds with film reels. The same five-hole reel geometry is reused in both circles. The favicon keeps the glove with stronger contours for small screens. The film illustration retains the original preview’s cobalt diagram style, with consistent perspective, five evenly spaced reel holes, and a simpler grid.
+The Microcinema mark keeps Dust Wave’s original waving glove and replaces the two dust clouds with film reels. The same five-hole reel geometry is reused in both circles. The favicon uses the original glove’s outer silhouette in solid white on a cobalt tile, with only two broad creases so it stays visible at 16 pixels on light and dark browser tabs. The film illustration retains the original preview’s cobalt diagram style, with consistent perspective, five evenly spaced reel holes, and a simpler grid.
 
 ## Files and editing
 
 - `masters/microcinema-mark.svg`: shape-editable logo with named glove and film-reel groups; transparent background.
-- `masters/icon.svg`: shape-editable favicon with stronger contours and fewer details; transparent background.
+- `masters/icon.svg`: shape-editable 64 × 64 favicon with a solid glove, two broad creases, and a cobalt tile; transparent only outside the rounded corners.
 - `masters/sample-shorts.svg`: editable illustration with named layers and live text. Departure Mono is embedded under its SIL Open Font License.
-- `exports/*.png`: inspected raster exports. Logo and favicon: 1078 × 985. Illustration: 1200 × 860. `icon-32.png` is the 32 × 32 favicon check. These are screen assets with no claimed print size.
+- `exports/*.png`: inspected raster exports. Logo: 1078 × 985. Favicon preview: 512 × 512. Illustration: 1200 × 860. `icon-16.png` and `icon-32.png` are the native-size favicon checks. These are screen assets with no claimed print size.
 - `../public/assets/*.svg`: web versions. Illustration lettering is outlined so it renders without a font dependency. Edit the live-type master or generator to change wording; the web lettering is shape-editable only.
 
 The original Dust Wave mark is preserved in `reference/dust-wave-square.svg`, copied from the existing Dust Wave website source (`src/img/favicon/dust-wave-square.svg`). Its paths supply the glove contour and palm marks. The reel geometry and illustration were reconstructed for this project with AI-assisted programmatic SVG construction, following the Vector Artwork Reconstruction skill. There are no new raster source layers. The existing venue photo and parking map retain their original sources.

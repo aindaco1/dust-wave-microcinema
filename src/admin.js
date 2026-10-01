@@ -55,6 +55,7 @@ async function refresh() {
   events = eventData.events;
   proposals = proposalData.proposals;
   renderLists();
+  if (location.hash === "#proposals") $("#proposals").scrollIntoView();
 }
 function dateText(e) {
   return new Intl.DateTimeFormat(lang === "es" ? "es-MX" : "en-US", {
@@ -80,7 +81,7 @@ function renderLists() {
     proposals
       .map(
         (p) =>
-          `<article class="proposal-row"><div><span class="status">${t.pending}</span><h3>${x(p.title)}</h3><p class="mono">${x(p.date)} / ${x(p.time)}</p><p class="proposal-description">${x(p.description)}</p><p>${x(p.name)} · <a href="mailto:${x(p.email)}">${x(p.email)}</a></p></div><div class="actions"><button class="button" data-proposal="${p.id}">${t.makeDraft}</button><button class="button" data-dismiss="${p.id}">${t.dismiss}</button></div></article>`,
+          `<article class="proposal-row"><div><span class="status">${t.pending}</span>${p.notificationStatus ? `<p class="small-note">${["failed", "uncertain"].includes(p.notificationStatus) ? t.notificationAttention : p.notificationStatus === "accepted" ? t.notificationSent : t.notificationPending}</p>` : ""}<h3>${x(p.title)}</h3><p class="mono">${x(p.date)} / ${x(p.time)}</p><p class="proposal-description">${x(p.description)}</p>${p.image ? `<img class="proposal-image" src="${x(p.image)}" alt="${x(p.title)}" width="200" height="200">` : ""}<p>${x(p.name)} · <a href="mailto:${x(p.email)}">${x(p.email)}</a></p></div><div class="actions"><button class="button" data-proposal="${p.id}">${t.makeDraft}</button><button class="button" data-dismiss="${p.id}">${t.dismiss}</button></div></article>`,
       )
       .join("") || `<p class="empty-small">${t.noProposals}</p>`;
 }
@@ -173,7 +174,7 @@ async function openEditor(event = null, proposal = null) {
     date: proposal?.date || "",
     time: proposal?.time || "",
     ...endAfter(proposal?.date, proposal?.time),
-    image: "",
+    image: proposal?.image || "",
   };
   editing = { ...e, proposalId: proposal?.id };
   dirty = false;

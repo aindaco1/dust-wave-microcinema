@@ -13,6 +13,8 @@ Provisioned September 30, 2026 in the Dust Wave Cloudflare account:
 - Dedicated managed Turnstile widget restricted to `dustwavemicrocinema.com`. The public site key is in `wrangler.jsonc`; `TURNSTILE_SECRET_KEY` is stored as a Worker secret.
 - Admin allowlist: `alonso@dustwave.xyz`. Removing an address immediately disables its sessions and pending sign-in links.
 - Sender: `microcinema@digest.dustwave.xyz`, using the existing verified `digest.dustwave.xyz` sending domain. Its provider DNS status was verified ready. The binding uses Cloudflare Email Service's object-based `send()` API and permits only that sender.
+- Proposal notifications go only to `info@dustwave.xyz` through the existing Cloudflare Email Service binding, with the submitter as Reply-To. The Images binding `IMAGE_PROCESSOR` normalizes optional proposal artwork.
+- Notification delivery runs every five minutes and after a new submission. `0003_proposal_notifications.sql` adds the private delivery queue and submission hash without changing existing proposals.
 - Daily cleanup of expired sessions, login tokens, and rate-limit records at 09:17 UTC. Recurring event listings are projected on requests and do not depend on this job.
 
 Keep `APP_MODE` set to `production` and `SITE_BASE` set to the exact HTTPS public origin. Local sign-in and challenge bypass require explicit local mode and a loopback origin; the deployed site must never use those settings. The initial production database contains only the Writers Group series. No sample data was imported.
@@ -44,6 +46,10 @@ If the authenticated CLI lacks D1 permissions, apply pending SQL through the aut
 - Publish other actual events through admin. Local development adds no fictional events.
 
 The old `dustwave.xyz/microcinema.html` page and its Community system require an explicit cutover decision before changing or redirecting them.
+
+## Notification operations
+
+The admin displays delivery status beside each pending proposal. `accepted` means Cloudflare accepted the message; use its saved `provider_id` to inspect actual delivery. Inspect `failed` or `uncertain` rows in `proposal_notifications` before intervening. Unknown send outcomes and expired sending leases are held without automatic retry because the native sender has no idempotency contract. Never blindly reset them: confirm provider history first. Local mode skips delivery even when an email binding is present.
 
 ## Rollback and data
 

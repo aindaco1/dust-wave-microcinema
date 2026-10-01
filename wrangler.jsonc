@@ -17,6 +17,7 @@
     "APP_MODE": "production",
     "ADMIN_EMAILS": "alonso@dustwave.xyz",
     "LOGIN_FROM": "microcinema@digest.dustwave.xyz",
+    "PROPOSAL_NOTIFY_TO": "info@dustwave.xyz",
     "TURNSTILE_SITE_KEY": "0x4AAAAAAFKxsPs2USeGqCrF",
   },
   "d1_databases": [
@@ -30,11 +31,12 @@
   "r2_buckets": [
     { "binding": "IMAGES", "bucket_name": "dust-wave-microcinema-images" },
   ],
+  "images": { "binding": "IMAGE_PROCESSOR" },
   "send_email": [
     {
       "name": "EMAIL",
       "allowed_sender_addresses": ["microcinema@digest.dustwave.xyz"],
     },
   ],
-  "triggers": { "crons": ["17 9 * * *"] },
+  "triggers": { "crons": ["17 9 * * *", "*/5 * * * *"] },
 }

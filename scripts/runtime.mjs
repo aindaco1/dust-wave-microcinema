@@ -25,6 +25,7 @@ export async function runtime({
           compatibilityDate: "2026-09-07",
           d1Databases: ["DB"],
           r2Buckets: ["IMAGES"],
+          images: { binding: "IMAGE_PROCESSOR" },
           serviceBindings: {
             ASSETS: async (request) => {
               const path = new URL(request.url).pathname;
@@ -58,6 +59,7 @@ export async function runtime({
             APP_MODE: production ? "production" : "local",
             ADMIN_EMAILS: "alonso@dustwave.xyz",
             LOGIN_FROM: "microcinema@digest.dustwave.xyz",
+            PROPOSAL_NOTIFY_TO: "info@dustwave.xyz",
           },
         },
       ],

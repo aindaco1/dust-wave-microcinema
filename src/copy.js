@@ -75,7 +75,21 @@ export const copy = {
     proposeBody:
       "Tell us what you’d like to show or organize, and when. We’ll take a look and follow up by email. This form doesn’t reserve the room.",
     private:
-      "Only our team sees your name and email. We’ll use them to get back to you about your idea.",
+      "Your proposal goes to our team for review, with an email notification to info@dustwave.xyz. Your name and email stay private.",
+    proposalImage: "Event image (optional)",
+    proposalImageHelp:
+      "JPEG, PNG, or WebP, up to 5 MB. We use the square crop shown below. Your image stays private until we publish the event.",
+    proposalImagePreview: "Square crop of your event image",
+    reference: "Reference",
+    notificationSent: "Notification sent to info@dustwave.xyz.",
+    notificationPending: "Email notification waiting to send.",
+    notificationAttention:
+      "Email notification needs attention. The proposal is saved here.",
+    image_dimensions:
+      "Use an image at least 100 × 100 pixels and no larger than 20 megapixels.",
+    images_unavailable: "We couldn’t process the image. Try again in a moment.",
+    duplicate_submission:
+      "This reference has already been used. Reload the page to start another proposal.",
     name: "Your name",
     email: "Email address",
     title: "Event title",
@@ -178,7 +192,7 @@ export const copy = {
     uploading: "Preparing artwork…",
     privacy: "Privacy",
     privacyText:
-      "Only the Microcinema team can see the contact details you send with a proposal. We use them to review your idea and get back to you. We don’t add you to a mailing list. To have your proposal deleted, email info@dustwave.xyz.",
+      "Only the Microcinema team can see the contact details you send with a proposal. We store your proposal privately and email it to info@dustwave.xyz so we can review your idea and get back to you. Uploaded artwork is only made public if we publish the event. We don’t add you to a mailing list. To have your proposal deleted, email info@dustwave.xyz.",
     emptyArtwork: "EVENT ARTWORK",
     sessionLoad: "Checking your session…",
     venueNote: "30 SEATS\nDUST WAVE STUDIO",
@@ -260,7 +274,22 @@ export const copy = {
     proposeBody:
       "Cuéntanos qué quieres mostrar u organizar y cuándo. Revisaremos tu propuesta y te responderemos por correo. Este formulario no reserva la sala.",
     private:
-      "Solo nuestro equipo puede ver tu nombre y correo. Los usaremos para responderte sobre tu idea.",
+      "Nuestro equipo revisará tu propuesta y recibirá una notificación en info@dustwave.xyz. Tu nombre y correo son privados.",
+    proposalImage: "Imagen del evento (opcional)",
+    proposalImageHelp:
+      "JPEG, PNG o WebP, hasta 5 MB. Usamos el recorte cuadrado que se muestra abajo. La imagen es privada hasta que publiquemos el evento.",
+    proposalImagePreview: "Recorte cuadrado de la imagen de tu evento",
+    reference: "Referencia",
+    notificationSent: "Notificación enviada a info@dustwave.xyz.",
+    notificationPending: "La notificación por correo está pendiente de envío.",
+    notificationAttention:
+      "La notificación necesita atención. La propuesta está guardada aquí.",
+    image_dimensions:
+      "Usa una imagen de al menos 100 × 100 píxeles y hasta 20 megapíxeles.",
+    images_unavailable:
+      "No pudimos procesar la imagen. Inténtalo de nuevo en un momento.",
+    duplicate_submission:
+      "Esta referencia ya fue usada. Recarga la página para empezar otra propuesta.",
     name: "Tu nombre",
     email: "Correo electrónico",
     title: "Título del evento",
@@ -364,7 +393,7 @@ export const copy = {
     uploading: "Preparando imagen…",
     privacy: "Privacidad",
     privacyText:
-      "Solo el equipo del Microcine puede ver los datos de contacto que envías con tu propuesta. Los usamos para revisar tu idea y responderte. No te añadimos a una lista de correo. Para pedir que eliminemos tu propuesta, escribe a info@dustwave.xyz.",
+      "Solo el equipo del Microcine puede ver los datos de contacto que envías con tu propuesta. Guardamos tu propuesta de forma privada y la enviamos por correo a info@dustwave.xyz para revisarla y responderte. Las imágenes solo se hacen públicas si publicamos el evento. No te añadimos a una lista de correo. Para pedir que eliminemos tu propuesta, escribe a info@dustwave.xyz.",
     emptyArtwork: "IMAGEN DEL EVENTO",
     sessionLoad: "Comprobando tu sesión…",
     venueNote: "30 BUTACAS\nESTUDIO DUST WAVE",

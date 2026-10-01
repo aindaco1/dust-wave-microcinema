@@ -36,3 +36,13 @@ Email receipt, full production admin sign-in, and physical calendar-app import s
 - Integration checks cover recurrence creation, drafts and removed-series privacy, public English/Spanish pages, information links, the sitemap, end-date filtering, and optimistic edit conflicts.
 - Browser checks: save and clear an end date; cancel, move, and reset a meeting; verify the public result and restore Writers Group to its normal schedule.
 - Desktop and phone public/admin layouts reviewed at 1280px and 375px; no horizontal overflow in the expanded meeting editor. Spanish event details and the localized Writers Group information link were verified.
+
+## Proposal workflow and notifications — September 30, 2026
+
+- Kept proposal review in Microcinema's own admin and storage. The existing submitted "test" proposal remains pending and unchanged; no retroactive emails were sent.
+- Added optional square JPEG/PNG/WebP artwork using the same Cloudflare Images decoding/cropping approach as Community, plus a submission reference, private admin preview, and artwork transfer into drafts. No Community database or sessions are used.
+- New proposals and their email intent save atomically. One notification goes to `info@dustwave.xyz`, with the submitter as Reply-To and the review link. Platform supplies bounded requests, crypto, email headers, outbox identity and retry delay. Existing Cloudflare Email Service supplies delivery; no extra provider credentials are needed.
+- 18 tests pass, including duplicate/concurrent submissions, changed-payload conflicts, malformed/oversized images, transactional rollback and orphan cleanup, draft/public media privacy, local mail suppression, concurrent dispatch, rate-limit retry, uncertain sends and suppressed recipients. Formatting and deployment dry run pass.
+- Local browser: rejected an oversized-dimension photo; retained the form, accepted supported artwork, displayed a receipt and private admin preview, then dismissed the QA proposal.
+- Production: database export saved privately before additive migration 0003. Desktop 1280px and phone 375px form layouts verified; phone had no horizontal overflow. Live managed Turnstile, multipart image processing, private artwork 404, protected admin API 401, and English/Spanish form/privacy pages verified.
+- The live "Microcinema notification test" submitted through the browser was accepted by Cloudflare Email Service in one attempt. The provider's stored message confirms the recipient, Reply-To, proposal details and admin link. Provider acceptance is verified; inbox receipt is not independently observed. The QA proposal was dismissed without publication.

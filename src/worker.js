@@ -1,10 +1,12 @@
+import { submitProposal } from "./proposals.js";
+import {
+  deliverNotifications,
+  NOTIFICATION_CRON,
+} from "./proposal-notifications.js";
 import { readBoundedBytes } from "@dustwave/worker-core/request-validation";
 import {
-  text,
-  email,
   fail,
   validateEvent,
-  localInstant,
   calendar,
   escape,
   ADDRESS,
@@ -13,18 +15,7 @@ import {
   expandEvents,
   windowEnd,
 } from "./domain.js";
-import {
-  auth,
-  admin,
-  body,
-  challenge,
-  headers,
-  json,
-  limit,
-  local,
-  origin,
-  sameOrigin,
-} from "./security.js";
+import { auth, admin, body, headers, json, limit, origin } from "./security.js";
 import {
   programme,
   eventPage,
@@ -52,51 +43,24 @@ async function getEvent(env, id) {
     await env.DB.prepare("SELECT * FROM events WHERE id=?").bind(id).first(),
   );
 }
-async function api(req, env, path) {
+async function api(req, env, path, ctx) {
   const authentication = await auth(req, env, path);
   if (authentication) return authentication;
-  if (path === "/api/proposals" && req.method === "POST") {
-    sameOrigin(req, env);
-    await limit(req, env, "proposal", 8);
-    const data = await body(req, 16000);
-    if (data.website) fail("invalid_request");
-    if (!uuid(data.id)) fail("invalid_request");
-    // Reconcile a retried submission before consuming another single-use challenge.
-    const existing = await env.DB.prepare("SELECT id FROM proposals WHERE id=?")
-      .bind(data.id)
-      .first();
-    if (existing) return json({ ok: true });
-    const proposal = {
-      title: text(data.title, 160, true),
-      description: text(data.description, 6000, true),
-      date: text(data.date, 10, true),
-      time: text(data.time, 5, true),
-      name: text(data.name, 100, true),
-      email: email(data.email),
-      lang: data.lang === "es" ? "es" : "en",
-    };
-    if (localInstant(proposal.date, proposal.time) <= new Date().toISOString())
-      fail("invalid_date");
-    await challenge(req, env, data.token, "proposal");
-    await env.DB.prepare(
-      "INSERT OR IGNORE INTO proposals(id,state,created_at,data) VALUES (?,'pending',?,?)",
-    )
-      .bind(data.id, new Date().toISOString(), JSON.stringify(proposal))
-      .run();
-    return json({ ok: true }, 201);
-  }
+  if (path === "/api/proposals" && req.method === "POST")
+    return submitProposal(req, env, ctx);
   if (path.startsWith("/api/admin/")) {
     const session = await admin(req, env);
     if (path === "/api/admin/events" && req.method === "GET")
       return json({ events: await allEvents(env, true) });
     if (path === "/api/admin/proposals" && req.method === "GET") {
       const { results } = await env.DB.prepare(
-        "SELECT * FROM proposals WHERE state='pending' ORDER BY created_at DESC",
+        "SELECT p.*, n.status AS notification_status FROM proposals p LEFT JOIN proposal_notifications n ON n.proposal_id=p.id WHERE p.state='pending' ORDER BY p.created_at DESC",
       ).all();
       return json({
         proposals: results.map((r) => ({
           id: r.id,
           createdAt: r.created_at,
+          notificationStatus: r.notification_status,
           ...JSON.parse(r.data),
         })),
       });
@@ -241,14 +205,14 @@ function html(content, status = 200) {
   });
 }
 export default {
-  async fetch(req, env) {
+  async fetch(req, env, ctx) {
     let url = new URL(req.url);
     const lang =
       url.pathname === "/es" || url.pathname.startsWith("/es/") ? "es" : "en";
     let path = url.pathname.replace(/^\/es(?=\/|$)/, "") || "/";
     try {
       if (url.pathname.startsWith("/api/"))
-        return await api(req, env, url.pathname);
+        return await api(req, env, url.pathname, ctx);
       if (!["GET", "HEAD"].includes(req.method))
         return json({ error: "method_not_allowed" }, 405, {
           Allow: "GET, HEAD",
@@ -354,7 +318,9 @@ export default {
       );
     }
   },
-  async scheduled(_event, env) {
+  async scheduled(event, env) {
+    await deliverNotifications(env);
+    if (event.cron === NOTIFICATION_CRON) return;
     const now = Date.now();
     await env.DB.batch(
       ["sessions", "login_tokens", "limits"].map((table) =>

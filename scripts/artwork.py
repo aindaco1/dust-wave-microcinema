@@ -69,12 +69,12 @@ def film_grain():
     groups = ''.join(
         f'<g id="grain-{name}" stroke-width="{width}" opacity="{opacity}"><path d="{"".join(points)}"/></g>'
         for name, width, opacity, points in zip(
-            ('fine', 'medium', 'coarse'), (.55, .8, 1.15), (.16, .11, .07), grains
+            ('fine', 'medium', 'coarse'), (.7, 1, 1.4), (.36, .26, .18), grains
         )
     )
     return svg('Subtle film grain', f'''<g fill="none" stroke="#47483f" stroke-linecap="round">
 {groups}
-<g id="film-scratches" stroke-width=".4" opacity=".045"><path d="M47.3 34l.2 29m-.1 7l.1 13M191.6 153l-.2 19m.1 6l.1 24M281.2 261l.2 31"/></g>
+<g id="film-scratches" stroke-width=".55" opacity=".14"><path d="M47.3 34l.2 29m-.1 7l.1 13M191.6 153l-.2 19m.1 6l.1 24M281.2 261l.2 31"/></g>
 </g>''', view='0 0 320 320', description='A seamless, low-contrast vector grain tile with three grain sizes and sparse hairline film scratches. Drawn for the warm Microcinema page background.')
 
 texture = film_grain()

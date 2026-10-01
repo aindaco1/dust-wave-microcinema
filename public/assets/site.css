@@ -19,7 +19,7 @@
 body {
   margin: 0;
   background: var(--paper);
-  background-image: url("/assets/film-grain.svg");
+  background-image: url("/assets/film-grain.svg?v=2");
   background-size: 320px 320px;
   color: var(--ink);
   font-family: var(--serif);

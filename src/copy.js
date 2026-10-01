@@ -55,6 +55,7 @@ export const copy = {
     emptyBody:
       "We’ll post the next events here. In the meantime, take a look at the space or send us an idea for something you’d like to host.",
     archiveEmpty: "No past events yet.",
+    archiveEmptyBody: "Events appear here after they’ve ended.",
     room: "THE ROOM",
     roomLocation: "The Dust Wave Microcinema is located at",
     roomDetails: [
@@ -91,7 +92,7 @@ export const copy = {
     linkSent:
       "If this address has access, a sign-in link is on its way. It expires in 15 minutes.",
     localLink: "Open local test sign-in",
-    localNote: "Local preview · includes clearly marked sample events.",
+    localNote: "Local preview · not the live site.",
     events: "Events",
     proposals: "Proposals",
     add: "Add event",
@@ -238,6 +239,7 @@ export const copy = {
     emptyBody:
       "Publicaremos los próximos eventos aquí. Mientras tanto, conoce el espacio o mándanos una idea de lo que te gustaría organizar.",
     archiveEmpty: "Todavía no hay eventos anteriores.",
+    archiveEmptyBody: "Los eventos aparecen aquí después de terminar.",
     room: "LA SALA",
     roomLocation: "El Microcine Dust Wave está ubicado en",
     roomDetails: [
@@ -276,8 +278,7 @@ export const copy = {
     linkSent:
       "Si esta dirección tiene acceso, recibirá un enlace que caduca en 15 minutos.",
     localLink: "Abrir acceso de prueba local",
-    localNote:
-      "Vista previa local · incluye eventos de ejemplo identificados como tales.",
+    localNote: "Vista previa local · no es el sitio público.",
     events: "Eventos",
     proposals: "Propuestas",
     add: "Añadir evento",

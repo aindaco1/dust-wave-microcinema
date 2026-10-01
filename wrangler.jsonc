@@ -1,9 +1,12 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "dust-wave-microcinema",
+  "account_id": "fee6147787ab9025e9fd8e6e8fd76910",
   "main": "src/worker.js",
   "compatibility_date": "2026-09-07",
-  "workers_dev": true,
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "dustwavemicrocinema.com", "custom_domain": true }],
   "assets": {
     "directory": "dist/public",
     "binding": "ASSETS",
@@ -14,12 +17,13 @@
     "APP_MODE": "production",
     "ADMIN_EMAILS": "alonso@dustwave.xyz",
     "LOGIN_FROM": "microcinema@digest.dustwave.xyz",
+    "TURNSTILE_SITE_KEY": "0x4AAAAAAFKxsPs2USeGqCrF",
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "dust-wave-microcinema",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "28a360bf-93f1-4c2f-8ba7-c03a30c77487",
       "migrations_dir": "migrations",
     },
   ],

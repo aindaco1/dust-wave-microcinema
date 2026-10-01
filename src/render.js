@@ -127,7 +127,7 @@ export function programme(events, lang, env, archive = false) {
   if (remaining.length)
     body += `<section class="schedule" aria-label="${t.programme}"><div class="list-heading mono"><span>${archive ? t.archive : t.programme}</span><span>${remaining.length} ${lang === "es" ? (remaining.length === 1 ? "EVENTO" : "EVENTOS") : remaining.length === 1 ? "EVENT" : "EVENTS"} / ${ZONE}</span></div>${remaining.map((e, i) => eventRow(e, lang, i + 1)).join("")}</section>`;
   else if (!list.length)
-    body += `<section class="empty-state">${brandMark("empty-symbol")}<div><h2>${archive ? t.archiveEmpty : t.empty}</h2><p>${t.emptyBody}</p><a class="button" href="${pathFor(lang, "/propose")}">${t.propose} ↗</a></div></section>`;
+    body += `<section class="empty-state">${brandMark("empty-symbol")}<div><h2>${archive ? t.archiveEmpty : t.empty}</h2><p>${archive ? t.archiveEmptyBody : t.emptyBody}</p><a class="button" href="${pathFor(lang, "/propose")}">${t.propose} ↗</a></div></section>`;
   body += `<aside class="venue-note"><div class="mono">${x(t.venueNote).replace("\n", "<br>")}</div><a class="text-link" href="${pathFor(lang, "/visit")}">${t.visit} ↗</a></aside>`;
   return shell({
     lang,

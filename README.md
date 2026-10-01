@@ -16,9 +16,9 @@ npm run dev
 ```
 
 Open **http://localhost:8793** and **http://localhost:8793/admin/**.
-Use `alonso@dustwave.xyz` and select **Open local test sign-in**. Local development sends no email. Migrations import Writers Group once from its public Dust Wave page. Existing local sample events remain clearly labeled; these are not real announcements. Restarting does not overwrite admin edits.
+Use `alonso@dustwave.xyz` and select **Open local test sign-in**. Local development sends no email. Migrations import Writers Group once from its public Dust Wave page. No sample events are added. Restarting does not overwrite admin edits.
 
-Local database and uploaded images persist under `.wrangler/local/`. To start a fresh local database with only the Writers Group import, move that directory aside and run `npm run build && node scripts/dev.mjs --empty`. The preview has no hot reload; restart `npm run dev` after source changes.
+Local database and uploaded images persist under `.wrangler/local/`. To start a fresh local database with only the Writers Group import, move that directory aside and run `npm run dev`. The preview has no hot reload; restart `npm run dev` after source changes.
 
 ```sh
 npm run check          # build plus domain, integration and platform-pin checks
@@ -59,7 +59,7 @@ Microcinema owns its model, storage, admin allowlist, sessions, routes, and depl
 
 ## Production setup
 
-See [DEPLOYMENT.md](DEPLOYMENT.md). The checked-in D1 ID is an explicit placeholder. No production database, domain, Turnstile key, or email delivery is provisioned by running the build or local preview.
+See [DEPLOYMENT.md](DEPLOYMENT.md). Production uses its own D1 database and private R2 bucket, with the custom domain and public Turnstile site key in `wrangler.jsonc`. The Turnstile secret is stored in Cloudflare. Running the build or local preview does not change production data or deploy the site.
 
 Design references and asset notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Validation evidence is in [VALIDATION.md](VALIDATION.md).
 

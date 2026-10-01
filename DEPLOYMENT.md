@@ -2,22 +2,20 @@
 
 The target is `https://dustwavemicrocinema.com`. This is an independent Worker deployment, with its own D1 database and R2 bucket. Existing Dust Wave Community resources are not reused.
 
-## Provision once
+## Production configuration
 
-1. Add the owned `dustwavemicrocinema.com` domain to the intended Cloudflare account and complete its nameserver setup.
-2. Create `dust-wave-microcinema` with `npx wrangler d1 create dust-wave-microcinema`. Replace the all-zero `database_id` in `wrangler.jsonc` with the returned ID.
-3. Create the private image bucket with `npx wrangler r2 bucket create dust-wave-microcinema-images`. Do not enable public bucket access; the Worker controls image visibility.
-4. Create a dedicated Turnstile widget restricted to `dustwavemicrocinema.com` (and an explicitly chosen staging hostname if used). Add `TURNSTILE_SITE_KEY` under `vars`; save the secret with `npx wrangler secret put TURNSTILE_SECRET_KEY`.
-5. Confirm the intended administrators in `ADMIN_EMAILS` (comma-separated). The allowlist is checked on every authenticated request. Removing an address immediately disables its sessions and pending sign-in links.
-6. Configure Cloudflare Email Service for the verified `digest.dustwave.xyz` sender domain, and confirm that `microcinema@digest.dustwave.xyz` is authorized. The binding uses Cloudflare Email Service's object-based `send()` API, not the legacy raw-message forwarding API. A different sender requires matching changes to `LOGIN_FROM` and the email binding.
-7. Add a custom-domain route to `wrangler.jsonc`:
+Provisioned September 30, 2026 in the Dust Wave Cloudflare account:
 
-```json
-"routes": [{ "pattern": "dustwavemicrocinema.com", "custom_domain": true }],
-"workers_dev": false
-```
+- Custom domain: `dustwavemicrocinema.com`; Workers.dev and preview URLs are disabled.
+- Worker: `dust-wave-microcinema`.
+- D1: `dust-wave-microcinema`, ID `28a360bf-93f1-4c2f-8ba7-c03a30c77487`. The initial schema and Writers Group import are applied and recorded in `d1_migrations`.
+- Private R2: `dust-wave-microcinema-images`. The Worker controls image visibility.
+- Dedicated managed Turnstile widget restricted to `dustwavemicrocinema.com`. The public site key is in `wrangler.jsonc`; `TURNSTILE_SECRET_KEY` is stored as a Worker secret.
+- Admin allowlist: `alonso@dustwave.xyz`. Removing an address immediately disables its sessions and pending sign-in links.
+- Sender: `microcinema@digest.dustwave.xyz`, using the existing verified `digest.dustwave.xyz` sending domain. Its provider DNS status was verified ready. The binding uses Cloudflare Email Service's object-based `send()` API and permits only that sender.
+- Daily cleanup of expired sessions, login tokens, and rate-limit records at 09:17 UTC. Recurring event listings are projected on requests and do not depend on this job.
 
-Keep `APP_MODE` set to `production` and `SITE_BASE` set to the exact HTTPS public origin. Local sign-in and challenge bypass require explicit local mode and a loopback origin; the deployed site must never use those settings.
+Keep `APP_MODE` set to `production` and `SITE_BASE` set to the exact HTTPS public origin. Local sign-in and challenge bypass require explicit local mode and a loopback origin; the deployed site must never use those settings. The initial production database contains only the Writers Group series. No sample data was imported.
 
 ## Apply and publish
 
@@ -31,6 +29,8 @@ npx wrangler d1 migrations apply DB --remote
 npm run deploy
 ```
 
+If the authenticated CLI lacks D1 permissions, apply pending SQL through the authorized Cloudflare API and record each completed filename in the standard `d1_migrations` table. Never mark a failed migration complete or re-import event content over admin edits.
+
 `npm run deploy:check` only bundles the application. It does not prove that bindings exist, keys work, the domain resolves, or email is delivered.
 
 ## Verify the live service
@@ -41,7 +41,7 @@ npm run deploy
 - Submit a proposal with the real Turnstile widget; verify its private admin record and its absence from public pages and sitemap.
 - Check desktop and phone layouts, HTTPS, response headers, and the real venue information.
 - Check the imported Writers Group series in admin, including its repeat schedule, optional end date, individual-date changes, and upcoming three-month window.
-- Publish other actual events through admin. Never import `scripts/demo.mjs` into production.
+- Publish other actual events through admin. Local development adds no fictional events.
 
 The old `dustwave.xyz/microcinema.html` page and its Community system require an explicit cutover decision before changing or redirecting them.
 

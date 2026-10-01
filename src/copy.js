@@ -34,7 +34,7 @@ export const copy = {
     ],
     parking: "PARKING",
     parkingDetails: [
-      "Please keep the curb in front of the studio clear. Trucks need to get in and out of the warehouse.",
+      "Please keep the curb in front of the studio clear. Trucks from our neighbors at Northern New Mexico Logistics need to get in and out of the adjacent warehouse.",
       "You can park across Haines Avenue or along 7th or 8th Street.",
       "Give yourself a few extra minutes to park and walk over.",
     ],
@@ -187,7 +187,7 @@ export const copy = {
     ],
     parking: "ESTACIONAMIENTO",
     parkingDetails: [
-      "Por favor, deja libre el frente del estudio. Los camiones necesitan entrar y salir del almacén.",
+      "Por favor, deja libre el frente del estudio. Los camiones de nuestros vecinos de Northern New Mexico Logistics necesitan entrar y salir del almacén contiguo.",
       "Puedes estacionar al otro lado de Haines Avenue o en las calles 7 y 8.",
       "Ven con unos minutos de margen para estacionar y caminar hasta la sala.",
     ],

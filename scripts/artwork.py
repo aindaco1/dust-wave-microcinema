@@ -3,6 +3,7 @@ from pathlib import Path
 import base64
 import html
 import math
+import random
 import xml.etree.ElementTree as ET
 from fontTools.ttLib import TTFont
 from fontTools.pens.svgPathPen import SVGPathPen
@@ -53,6 +54,32 @@ favicon = svg('Dust Wave Microcinema', f'''<g id="blue-tile"><rect width="64" he
     view='0 0 64 64', description='A solid white Dust Wave glove on a cobalt blue tile, simplified for browser tabs.')
 (ASSETS/'icon.svg').write_text(favicon)
 (MASTERS/'icon.svg').write_text(favicon)
+
+def film_grain():
+    # Seeded, jittered cells keep the grain even without a visible dot grid.
+    # The tile has no raster layer, SVG filter, or animation.
+    rng = random.Random(709)
+    grains = [[], [], []]
+    for row in range(64):
+        for column in range(64):
+            x = (column + rng.uniform(.15, .85)) * 5
+            y = (row + rng.uniform(.15, .85)) * 5
+            weight = rng.choices(range(3), weights=(4, 5, 1))[0]
+            grains[weight].append(f'M{x:.1f} {y:.1f}h.01')
+    groups = ''.join(
+        f'<g id="grain-{name}" stroke-width="{width}" opacity="{opacity}"><path d="{"".join(points)}"/></g>'
+        for name, width, opacity, points in zip(
+            ('fine', 'medium', 'coarse'), (.55, .8, 1.15), (.16, .11, .07), grains
+        )
+    )
+    return svg('Subtle film grain', f'''<g fill="none" stroke="#47483f" stroke-linecap="round">
+{groups}
+<g id="film-scratches" stroke-width=".4" opacity=".045"><path d="M47.3 34l.2 29m-.1 7l.1 13M191.6 153l-.2 19m.1 6l.1 24M281.2 261l.2 31"/></g>
+</g>''', view='0 0 320 320', description='A seamless, low-contrast vector grain tile with three grain sizes and sparse hairline film scratches. Drawn for the warm Microcinema page background.')
+
+texture = film_grain()
+(ASSETS/'film-grain.svg').write_text(texture)
+(MASTERS/'film-grain.svg').write_text(texture)
 
 def label(text, x, y, size=18, outlined=False):
     if not outlined:

@@ -6,12 +6,8 @@ export const copy = {
     propose: "Propose an event",
     admin: "Admin",
     skip: "Skip to content",
-    edition: "INDEPENDENT CINEMA · ALBUQUERQUE, NM",
-    tagline: "Come watch movies with us.",
-    intro:
-      "We make films, and we like getting people together to watch them. Our 30-seat screening room is inside the Dust Wave studio in Albuquerque.",
-    upcoming: "Coming up",
-    eyebrow: "SCREENINGS & EVENTS",
+    siteDescription:
+      "Film screenings and events at Dust Wave Microcinema in Albuquerque, New Mexico.",
     next: "UP NEXT",
     more: "View event",
     tickets: "Buy tickets",
@@ -30,9 +26,6 @@ export const copy = {
       "We’ll post the next events here. In the meantime, take a look at the space or send us an idea for something you’d like to host.",
     archiveEmpty: "No past events yet.",
     archiveIntro: "The films we’ve screened and the events we’ve hosted.",
-    visitTitle: "Come by the studio.",
-    visitIntro:
-      "We screen films and host talks in the same studio where we make things. Come by for an event, or get in touch about putting one together.",
     room: "THE ROOM",
     roomBody:
       "Our screening room takes up 700 square feet of the Dust Wave studio and seats 30 people. We sell popcorn, snacks, candy, drinks, and Dust Wave merch at events. There’s a donation box, too, if you’d like to help keep the space going.",
@@ -160,12 +153,8 @@ export const copy = {
     propose: "Propón un evento",
     admin: "Administración",
     skip: "Ir al contenido",
-    edition: "CINE INDEPENDIENTE · ALBUQUERQUE, NM",
-    tagline: "Ven a ver películas con nosotros.",
-    intro:
-      "Hacemos películas y nos gusta reunirnos para verlas. Nuestra sala de 30 butacas está dentro del estudio Dust Wave, en Albuquerque.",
-    upcoming: "Lo que viene",
-    eyebrow: "PROYECCIONES Y EVENTOS",
+    siteDescription:
+      "Proyecciones y eventos en el Microcine Dust Wave en Albuquerque, Nuevo México.",
     next: "PRÓXIMAMENTE",
     more: "Ver evento",
     tickets: "Comprar entradas",
@@ -185,9 +174,6 @@ export const copy = {
     archiveEmpty: "Todavía no hay eventos anteriores.",
     archiveIntro:
       "Las películas que hemos proyectado y los eventos que hemos organizado.",
-    visitTitle: "Date una vuelta por el estudio.",
-    visitIntro:
-      "Proyectamos películas y organizamos charlas en el mismo estudio donde trabajamos. Ven a un evento o escríbenos para organizar uno.",
     room: "LA SALA",
     roomBody:
       "La sala ocupa 700 pies cuadrados del estudio Dust Wave y tiene 30 butacas. En los eventos vendemos palomitas, snacks, dulces, bebidas y productos de Dust Wave. También hay una caja de donaciones si quieres ayudarnos a mantener el espacio.",

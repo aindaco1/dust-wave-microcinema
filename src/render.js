@@ -67,10 +67,10 @@ export function shell({
     p = pathFor.bind(null, lang),
     canonical = origin(env) + p(path);
   const other = lang === "en" ? "es" : "en";
-  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${x(title ? title + " · Dust Wave Microcinema" : "Dust Wave Microcinema · Albuquerque")}</title><meta name="description" content="${x(description || t.intro)}"><meta name="theme-color" content="#fbfbf8"><link rel="icon" href="/assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css"><link rel="preload" href="/assets/departure-mono.woff2" as="font" type="font/woff2" crossorigin><link rel="canonical" href="${x(canonical)}"><link rel="alternate" hreflang="en" href="${x(origin(env) + pathFor("en", path))}"><link rel="alternate" hreflang="es" href="${x(origin(env) + pathFor("es", path))}"><meta property="og:title" content="${x(title || "Dust Wave Microcinema")}"><meta property="og:description" content="${x((description || t.intro).slice(0, 300))}"><meta property="og:url" content="${x(canonical)}"><meta property="og:type" content="website"><meta property="og:image" content="${x(origin(env) + (image || "/assets/room.webp"))}">${privatePage || local(env) ? '<meta name="robots" content="noindex,nofollow">' : ""}</head><body class="${path.startsWith("/admin") ? "admin-page" : ""}"><a class="skip" href="#main">${t.skip}</a>
+  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${x(title ? title + " · Dust Wave Microcinema" : "Dust Wave Microcinema · Albuquerque")}</title><meta name="description" content="${x(description || t.siteDescription)}"><meta name="theme-color" content="#fbfbf8"><link rel="icon" href="/assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css"><link rel="preload" href="/assets/departure-mono.woff2" as="font" type="font/woff2" crossorigin><link rel="canonical" href="${x(canonical)}"><link rel="alternate" hreflang="en" href="${x(origin(env) + pathFor("en", path))}"><link rel="alternate" hreflang="es" href="${x(origin(env) + pathFor("es", path))}"><meta property="og:title" content="${x(title || "Dust Wave Microcinema")}"><meta property="og:description" content="${x((description || t.siteDescription).slice(0, 300))}"><meta property="og:url" content="${x(canonical)}"><meta property="og:type" content="website"><meta property="og:image" content="${x(origin(env) + (image || "/assets/room.webp"))}">${privatePage || local(env) ? '<meta name="robots" content="noindex,nofollow">' : ""}</head><body class="${path.startsWith("/admin") ? "admin-page" : ""}"><a class="skip" href="#main">${t.skip}</a>
  ${local(env) ? `<div class="preview-banner">${t.localNote}</div>` : ""}
- <div class="page"><header class="site-header"><div class="topline"><a href="https://dustwave.xyz" class="parent-brand">DUST WAVE ↗</a><span>${t.edition}</span><a href="${pathFor(other, path)}" lang="${other}" aria-label="${other === "es" ? "Ver en español" : "View in English"}">${other === "es" ? "ESPAÑOL" : "ENGLISH"}</a></div>
- <div class="masthead"><a href="${p("/")}" class="wordmark" aria-label="Dust Wave Microcinema">DUST WAVE<br>MICROCINEMA${brandMark("brand-symbol")}</a><p>${x(t.tagline).replace("\n", "<br>")}</p></div>
+ <div class="page"><header class="site-header"><div class="topline"><a href="https://dustwave.xyz" class="parent-brand">DUST WAVE ↗</a><a href="${pathFor(other, path)}" lang="${other}" aria-label="${other === "es" ? "Ver en español" : "View in English"}">${other === "es" ? "ESPAÑOL" : "ENGLISH"}</a></div>
+ <div class="masthead"><a href="${p("/")}" class="wordmark" aria-label="Dust Wave Microcinema">DUST WAVE<br>MICROCINEMA${brandMark("brand-symbol")}</a></div>
  <nav aria-label="${lang === "es" ? "Navegación principal" : "Main navigation"}">${[
    ["/", t.programme],
    ["/archive", t.archive],
@@ -82,7 +82,7 @@ export function shell({
        `<a ${path === href ? 'aria-current="page"' : ""} href="${p(href)}">${label}</a>`,
    )
    .join("")}</nav></header>
- <main id="main">${body}</main><footer><div class="footer-mark">${brandMark("footer-symbol")}</div><p><span class="mono">709 Haines Ave NW<br>Albuquerque, NM 87102</span></p><div><a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a><br><a href="${p("/privacy")}">${t.privacy}</a> · <a href="${p("/admin/")}">${t.admin}</a></div></footer></div>
+ <main id="main">${body}</main><footer><div class="footer-mark">${brandMark("footer-symbol")}</div><p><span class="mono">709 Haines Ave NW<br>Albuquerque, NM 87102</span></p><div><a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a><br><a href="${p("/privacy")}">${t.privacy}</a></div></footer></div>
  ${script ? `<script type="module" src="/assets/${script}.js"></script>` : ""}${script && !local(env) ? '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' : ""}</body></html>`;
 }
 export function cta(event, lang, { secondary = true } = {}) {
@@ -117,14 +117,17 @@ export function programme(events, lang, env, archive = false) {
         : a.startsAt.localeCompare(b.startsAt),
     );
   const first = list[0] && localized(list[0], lang);
-  let body = `<section class="section-heading"><span class="mono">${archive ? (lang === "es" ? "EL ARCHIVO" : "THE ARCHIVE") : t.eyebrow}</span><h1>${archive ? t.archive : t.upcoming}</h1><p>${archive ? t.archiveIntro : t.intro}</p></section>`;
+  const remaining = archive ? list : list.slice(1);
+  let body = archive
+    ? `<section class="section-heading"><span class="mono">${lang === "es" ? "EL ARCHIVO" : "THE ARCHIVE"}</span><h1>${t.archive}</h1><p>${t.archiveIntro}</p></section>`
+    : `<h1 class="visually-hidden">${t.programme}</h1>`;
   if (first && !archive)
     body += `<section class="featured">${artwork(first, lang)}<div class="feature-copy"><span class="eyebrow">${t.next}</span><p class="feature-date mono">${dateLabel(first.startsAt, lang, { weekday: "short" })} <span> / </span> ${timeLabel(first.startsAt, lang)}</p><h2><a href="${pathFor(lang, `/events/${first.slug}`)}">${x(first.title)}</a></h2><p class="film-details">${x(first.details)}</p><p class="feature-description">${x(first.description.length > 320 ? first.description.slice(0, 317) + "…" : first.description)}</p><p class="admission-label mono">${x(first.price)}</p><div class="actions">${cta(first, lang, { secondary: false })}</div><a class="text-link" href="${pathFor(lang, `/events/${first.slug}`)}">${t.readMore} →</a></div></section>`;
-  if (list.length)
-    body += `<section class="schedule" aria-label="${t.programme}"><div class="list-heading mono"><span>${archive ? t.archive : t.programme}</span><span>${list.length} ${lang === "es" ? "EVENTOS" : "EVENTS"} / ${ZONE}</span></div>${list.map((e, i) => eventRow(e, lang, i + 1)).join("")}</section>`;
-  else
+  if (remaining.length)
+    body += `<section class="schedule" aria-label="${t.programme}"><div class="list-heading mono"><span>${archive ? t.archive : t.programme}</span><span>${remaining.length} ${lang === "es" ? (remaining.length === 1 ? "EVENTO" : "EVENTOS") : remaining.length === 1 ? "EVENT" : "EVENTS"} / ${ZONE}</span></div>${remaining.map((e, i) => eventRow(e, lang, i + 1)).join("")}</section>`;
+  else if (!list.length)
     body += `<section class="empty-state">${brandMark("empty-symbol")}<div><h2>${archive ? t.archiveEmpty : t.empty}</h2><p>${t.emptyBody}</p><a class="button" href="${pathFor(lang, "/propose")}">${t.propose} ↗</a></div></section>`;
-  body += `<aside class="venue-note"><div class="mono">${x(t.venueNote).replace("\n", "<br>")}</div><p>${t.visitIntro}</p><a class="text-link" href="${pathFor(lang, "/visit")}">${t.visit} ↗</a></aside>`;
+  body += `<aside class="venue-note"><div class="mono">${x(t.venueNote).replace("\n", "<br>")}</div><a class="text-link" href="${pathFor(lang, "/visit")}">${t.visit} ↗</a></aside>`;
   return shell({
     lang,
     path: archive ? "/archive" : "/",
@@ -153,7 +156,7 @@ export function visitPage(lang, env) {
     path: "/visit",
     title: t.visit,
     env,
-    body: `<section class="section-heading"><span class="mono">709 HAINES AVENUE NW</span><h1>${t.visitTitle}</h1><p>${t.visitIntro}</p></section><div class="visit-grid"><figure><img class="room-photo" src="/assets/room.webp" alt="${lang === "es" ? "La sala del Microcine Dust Wave" : "The Dust Wave Microcinema screening room"}" width="1200" height="800"><figcaption class="mono">FIG. 01 / DUST WAVE HQ</figcaption></figure><div class="prose"><h2 class="eyebrow">${t.room}</h2><p>${t.roomBody}</p><address>${ADDRESS}</address><a class="button" href="https://maps.google.com/?q=709+Haines+Ave+NW+Albuquerque+NM+87102" rel="noopener">${t.directions} ↗</a><p>${t.access} <a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a>.</p></div></div><div class="visit-grid parking"><div class="prose"><h2 class="eyebrow">${t.parking}</h2><p>${t.parkingBody}</p></div><figure><img src="/assets/parking.webp" alt="${lang === "es" ? "Mapa: no estacionar frente al estudio; estacionamiento al otro lado de Haines y en las calles 7 y 8." : "Parking map: keep the studio curb clear; park across Haines or on 7th and 8th Streets."}" loading="lazy" width="1000" height="800"></figure></div>`,
+    body: `<h1 class="visually-hidden">${t.visit}</h1><div class="visit-grid"><figure class="visit-figure"><div class="photo-frame"><img class="room-photo" src="/assets/room.webp" alt="${lang === "es" ? "La sala del Microcine Dust Wave" : "The Dust Wave Microcinema screening room"}" width="1200" height="800"></div><figcaption><span>FIG. 01</span><span>DUST WAVE HQ</span></figcaption></figure><div class="prose"><h2 class="eyebrow">${t.room}</h2><p>${t.roomBody}</p><address>${ADDRESS}</address><a class="button" href="https://maps.google.com/?q=709+Haines+Ave+NW+Albuquerque+NM+87102" rel="noopener">${t.directions} ↗</a><p>${t.access} <a href="mailto:info@dustwave.xyz">info@dustwave.xyz</a>.</p></div></div><div class="visit-grid parking"><div class="prose"><h2 class="eyebrow">${t.parking}</h2><p>${t.parkingBody}</p></div><figure class="visit-figure"><div class="photo-frame"><img src="/assets/parking.webp" alt="${lang === "es" ? "Mapa: no estacionar frente al estudio; estacionamiento al otro lado de Haines y en las calles 7 y 8." : "Parking map: keep the studio curb clear; park across Haines or on 7th and 8th Streets."}" loading="lazy" width="1000" height="800"></div><figcaption><span>FIG. 02</span><span>${t.parking}</span></figcaption></figure></div>`,
   });
 }
 export function proposalPage(lang, env) {

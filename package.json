@@ -25,13 +25,13 @@
     "esbuild": "0.28.1",
     "miniflare": "5.20260907.0-alpha",
     "prettier": "3.6.2",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "wrangler": "4.129.1"
   },
   "overrides": {
     "undici": "7.30.0",
     "miniflare": {
-      "sharp": "0.35.4"
+      "sharp": "0.35.5"
     }
   }
 }

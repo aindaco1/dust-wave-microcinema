@@ -1,3 +1,4 @@
+import { escapeIcsText, foldIcsLine } from "@dustwave/worker-core/icalendar";
 import {
   dateAtTimeInTimeZone,
   getTimeZoneParts,
@@ -315,28 +316,6 @@ export function escape(s) {
       ],
   );
 }
-const icsText = (s) =>
-  String(s || "")
-    .replace(/\\/g, "\\\\")
-    .replace(/\r?\n/g, "\\n")
-    .replace(/;/g, "\\;")
-    .replace(/,/g, "\\,");
-function fold(line) {
-  let out = "",
-    chunk = "",
-    bytes = 0;
-  for (const c of line) {
-    const n = new TextEncoder().encode(c).length;
-    if (bytes + n > 75) {
-      out += chunk + "\r\n";
-      chunk = " ";
-      bytes = 1;
-    }
-    chunk += c;
-    bytes += n;
-  }
-  return out + chunk;
-}
 export function calendar(event, origin, lang = "en") {
   const e = localized(event, lang),
     stamp = (s) =>
@@ -358,15 +337,15 @@ export function calendar(event, origin, lang = "en") {
       `SEQUENCE:${e.revision}`,
       `DTSTART:${stamp(e.startsAt)}`,
       `DTEND:${stamp(e.endsAt)}`,
-      `SUMMARY:${icsText(e.title)}`,
-      `DESCRIPTION:${icsText(e.description)}`,
-      `LOCATION:${icsText(ADDRESS)}`,
+      `SUMMARY:${escapeIcsText(e.title)}`,
+      `DESCRIPTION:${escapeIcsText(e.description)}`,
+      `LOCATION:${escapeIcsText(ADDRESS)}`,
       `URL:${origin}${lang === "es" ? "/es" : ""}/events/${e.slug}`,
       `STATUS:${e.status === "cancelled" ? "CANCELLED" : "CONFIRMED"}`,
       "END:VEVENT",
       "END:VCALENDAR",
     ]
-      .map(fold)
+      .map(foldIcsLine)
       .join("\r\n") + "\r\n"
   );
 }

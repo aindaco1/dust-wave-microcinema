@@ -1,6 +1,6 @@
 import { escapeIcsText, foldIcsLine } from "@dustwave/worker-core/icalendar";
 import {
-  dateAtTimeInTimeZone,
+  classifyLocalTime,
   getTimeZoneParts,
 } from "@dustwave/worker-core/date-time";
 export const ZONE = "America/Denver";
@@ -28,37 +28,13 @@ export function email(value) {
   return s;
 }
 export function localInstant(date, time) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time))
-    fail("invalid_date");
-  const [h, m] = time.split(":").map(Number);
-  if (h > 23 || m > 59) fail("invalid_date");
-  const d = dateAtTimeInTimeZone(date, ZONE, h, m);
-  if (!Number.isFinite(d.getTime())) fail("invalid_date");
-  const p = getTimeZoneParts(d, ZONE);
-  const parts = date.split("-").map(Number);
-  if (
-    p.year !== parts[0] ||
-    p.month !== parts[1] ||
-    p.day !== parts[2] ||
-    p.hour !== h ||
-    p.minute !== m
-  )
-    fail("invalid_date");
-  // A repeated fall-back hour has two valid instants. Require an unambiguous time.
-  const later = getTimeZoneParts(new Date(+d + 3600000), ZONE);
-  const earlier = getTimeZoneParts(new Date(+d - 3600000), ZONE);
-  if (
-    [later, earlier].some(
-      (v) =>
-        v.year === p.year &&
-        v.month === p.month &&
-        v.day === p.day &&
-        v.hour === h &&
-        v.minute === m,
-    )
-  )
-    fail("ambiguous_time");
-  return d.toISOString();
+  const result = classifyLocalTime(date, time, ZONE);
+  if (result.kind === "missing") fail("invalid_date");
+  if (result.kind === "unique") return result.instant;
+  // Denver's 1883 four-second rollback previously resolved to the earlier instant.
+  if (Date.parse(result.later) - Date.parse(result.earlier) < 60_000)
+    return result.earlier;
+  fail("ambiguous_time");
 }
 export function externalUrl(value, mode) {
   const s = text(value, 2048, mode !== "walkin");

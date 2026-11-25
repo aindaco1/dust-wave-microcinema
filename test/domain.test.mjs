@@ -22,6 +22,8 @@ test("Albuquerque dates handle summer/winter, midnight, invalid dates and DST ed
   assert.equal(localInstant("2026-10-10", "19:00"), "2026-10-11T01:00:00.000Z");
   assert.equal(localInstant("2026-12-10", "19:00"), "2026-12-11T02:00:00.000Z");
   assert.equal(localInstant("2026-10-10", "00:00"), "2026-10-10T06:00:00.000Z");
+  assert.equal(localInstant("1899-12-31", "12:00"), "1899-12-31T19:00:00.000Z");
+  assert.equal(localInstant("1883-11-18", "12:00"), "1883-11-18T18:59:56.000Z");
   for (const [day, time] of [
     ["2026-02-30", "19:00"],
     ["2026-03-08", "02:30"],
